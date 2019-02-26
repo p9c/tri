@@ -50,7 +50,29 @@ func (
 	var validSet [2]bool
 	brief, handler := 0, 1
 	for i, x := range R[1:] {
-
+		switch x.(type) {
+		case Short:
+		//
+		case Brief:
+			if validSet[brief] {
+				return fmt.Errorf("only one Brief permitted in a Command, second found at index %d", i)
+			}
+		case Usage:
+		//
+		case Help:
+		//
+		case Examples:
+		//
+		case Var:
+		//
+		case Trigger:
+		//
+		case Handler:
+			if validSet[handler] {
+				return fmt.Errorf("only one Handler permitted in a Command, second found at index %d", i)
+			}
+		default:
+		}
 	}
 	return nil
 }
@@ -111,6 +133,9 @@ func (
 	R := *r
 	if len(R) < 1 {
 		return errors.New("Examples field may not be empty")
+	}
+	if len(R)%2 != 0 {
+		return fmt.Errorf("Examples must be in pairs, odd number of elements found")
 	}
 	for i, x := range R {
 		_, ok := x.(string)
