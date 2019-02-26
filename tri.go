@@ -19,6 +19,7 @@
 package main
 
 import (
+	"reflect"
 	"errors"
 	"fmt"
 	"unicode"
@@ -284,10 +285,18 @@ func (
 	r *Slot,
 ) Valid() error {
 
-	// Slot may only contain one element. The type check is in the Var validator
+	// Slot may only contain one type of element. The type check is in the Var, here we only ensure the slots contain pointers to the same type, the parser will put the final parsed value in all of them. Multiple variables are permitted here to enable the configuration of more than one application
 	R := *r
-	if len(R) != 1 {
-		return errors.New("Slot type must contain (only) one element")
+	var slotTypes []reflect.Type
+	for _, x := range R {
+		slotTypes = append(slotTypes, reflect.TypeOf(x))
+	}
+	for i, x := range slotTypes {
+		if i > 0 {
+			if slotTypes[i] != slotTypes[i-1] {
+				return fmt.Errorf("slot contains more than one type of variable, found %v at index %d", x, i)
+			}
+		}
 	}
 	return nil
 }
@@ -313,7 +322,7 @@ func (
 	// A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri
 	R := *r
 	if len(R) < 4 {
-		return errors.New("a Tri must contain 4 elements: name, Brief, Version and Commands")
+		return errors.New("a Tri must contain at least 4 elements: name, Brief, Version and Commands")
 	}
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [4]bool
@@ -322,6 +331,7 @@ func (
 	if !ok {
 		return errors.New("first element of a Tri must be the application name")
 	}
+	// The mandatory elements also may not be repeated:
 	for i, x := range R {
 		switch y := x.(type) {
 		case Brief:
