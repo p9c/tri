@@ -180,22 +180,25 @@ func (r *Examples) Validate() error {
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
-// A group must contain one string, anything else is invalid.
+// A group must contain one string, anything else is invalid. It also has the same limitation as a name - only letters.
 func (r *Group) Validate() error {
 
 	R := *r
 	if len(R) != 1 {
 		return errors.New("Group must (only) contain one element")
 	}
-	_, ok := R[0].(string)
+	s, ok := R[0].(string)
 	if !ok {
 		return errors.New("Group element must be a string")
+	}
+	if e := ValidName(s); e != nil {
+		return fmt.Errorf("error in name of Command: %v", e)
 	}
 	return nil
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
-// Help may only contain one string.
+// Help may only contain one string. It will be parsed as markdown format and possibly can be set to style it with ANSI codes.
 func (r *Help) Validate() error {
 
 	R := *r

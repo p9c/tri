@@ -8,14 +8,14 @@
    - [x] `Default.Validate()`
    - [x] `DefaultCommand.Validate()`
    - [x] `Examples.Validate()`
-   - [ ] `Group.Validate()`
-   - [ ] `Help.Validate()`
-   - [ ] `RunAfter.Validate()`
-   - [ ] `Short.Validate()`
-   - [ ] `Slot.Validate()`
-   - [ ] `Terminates.Validate()`
+   - [x] `Group.Validate()`
+   - [x] `Help.Validate()`
+   - [x] `RunAfter.Validate()`
+   - [x] `Short.Validate()`
+   - [x] `Slot.Validate()`
+   - [x] `Terminates.Validate()`
    - [ ] `Tri.Validate()`
    - [ ] `Trigger.Validate()`
-   - [ ] `Usage.Validate()`
+   - [x] `Usage.Validate()`
    - [ ] `Var.Validate()`
-   - [ ] `Version.Validate()`
+   - [x] `Version.Validate()`
