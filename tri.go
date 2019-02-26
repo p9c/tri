@@ -15,6 +15,8 @@
 	Validators for each type in this package automatically trigger the validators for their (valid set of) constituent elements, so only one Valid() invocation is needed, on the Tri type. If Valid functions return an error, it passes back through the cascade to the root where it is printed to tell the (proogrammer) their declaration was erroneous.
 
 	Without validity checks, in a strict static typing language, dynamic variables can cause errors when assuming the input is correct, and such errors can potentially escape notice for a long time, so by adding these runtime bounds and set membership tests, such errors are caught before the application they configure even starts execution of the main() - the Tri type's Valid() method should be invoked in a init() so it runs after the calls in any var blocks and before the main() tries to parse the CLI flags.
+
+	Note that all types use the Tri []interface{} type because, while it is possible to omit fields by using field tags, if the object is another composite object, its type must be specified unless it is an array and the members are implicitly typed. By using interface slice instead, the declaration syntax has minimum redundant type specifications.
 */
 package tri
 

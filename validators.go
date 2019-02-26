@@ -33,28 +33,40 @@ func (
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints
-// This validator only has to check the elements of the slice contain the mandatory elements: first element is the name string, and that there is a Brief, so there is something to print out in the top level help.
+// This validator only has to check the elements of the slice are zero or more Command items
+func (
+	r *Command,
+) Valid() error {
+
+	R := *r
+	s, ok := R[0].(string)
+	if !ok {
+		return fmt.Errorf("first element of Command must be a string")
+	}
+	if e := ValidName(s); e != nil {
+		return fmt.Errorf("error in name of Command: %v", e)
+	}
+	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
+	var validSet [2]bool
+	brief, handler := 0, 1
+	for i, x := range R[1:] {
+
+	}
+	return nil
+}
+
+// Valid checks to ensure the contents of this node type satisfy constraints
+// This validator only has to check the elements of the slice are zero or more Command items
 func (
 	r *Commands,
 ) Valid() error {
 
 	R := (*r)
 	for i, x := range R {
-		if len(x) < 3 {
-			return fmt.Errorf(
-				"Commands item %d has less than minimum elements, Brief and Handler are required", i)
+		e := x.Valid()
+		if e != nil {
+			return fmt.Errorf("error in element %d of Commands list: %v", i, e)
 		}
-		y, ok := x[0].(string)
-		if !ok {
-			return fmt.Errorf("first element of Commands element %d is not a string", i)
-		}
-		if e := ValidName(y); e != nil {
-			return fmt.Errorf(
-				"Commands element %d's first element is not a string, %s: %s",
-				i, y, e.Error(),
-			)
-		}
-		// Next, check that all present members are in the valid set for this container
 	}
 	return nil
 }
@@ -300,7 +312,7 @@ func (
 	if !ok {
 		return errors.New("first element of Trigger must be the name")
 	} else if e := ValidName(name); e != nil {
-		return e
+		return fmt.Errorf("Invalid Name in Trigger at index 0: %v", e)
 	}
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [2]bool
@@ -326,7 +338,8 @@ func (
 				return fmt.Errorf("Handler at index %d may not be nil", i)
 			}
 			if validSet[handler] {
-				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
+				return fmt.Errorf(
+					"Trigger may must (only) contain one Brief, second found at index %d", i)
 			} else {
 				validSet[handler] = true
 			}
@@ -373,7 +386,7 @@ func (
 		}
 	}
 	if !(validSet[brief] && validSet[handler]) {
-		return errors.New("Trigger must contain (only) one each of Brief and Handler")
+		return errors.New("Trigger must contain one each of Brief and Handler")
 	}
 	return nil
 }
