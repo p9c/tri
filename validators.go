@@ -274,10 +274,13 @@ func (
 	switch {
 	case !validSet[brief]:
 		return errors.New("Tri is missing its Brief field")
+
 	case !validSet[version]:
 		return errors.New("Tri is missing its Version field")
+
 	case !validSet[commands]:
 		return errors.New("Tri is missing its Commands field")
+
 	}
 	return nil
 }
@@ -299,52 +302,78 @@ func (
 	} else if e := ValidName(name); e != nil {
 		return e
 	}
+	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
+	var validSet [2]bool
+	brief, handler := 0, 1
 	// check for presence of all mandatory and non-presence of impermissible element types
 	for i, x := range R[1:] {
+
 		switch y := x.(type) {
+
 		case Brief:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+			if validSet[brief] {
+				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
+			} else {
+				validSet[brief] = true
+			}
+
 		case Handler:
 			if y == nil {
 				return fmt.Errorf("Handler at index %d may not be nil", i)
 			}
+			if validSet[handler] {
+				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
+			} else {
+				validSet[handler] = true
+			}
+
 		case Short:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		case Usage:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		case Help:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		case Default:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		case Terminates:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		case RunAfter:
 			if e := y.Valid(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
+
 		default:
 			return fmt.Errorf(
 				"found invalid item type at element %d in a Trigger", i)
 		}
+	}
+	if !(validSet[brief] && validSet[handler]) {
+		return errors.New("Trigger must contain (only) one each of Brief and Handler")
 	}
 	return nil
 }

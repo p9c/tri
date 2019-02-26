@@ -89,6 +89,9 @@ var exampleTri = Tri{
 				Default{},
 				Terminates{},
 				RunAfter{},
+				func(Tri) int {
+					return 0
+				},
 			},
 			func(Tri) int {
 				return 0
@@ -100,7 +103,9 @@ var exampleTri = Tri{
 			Usage{"usage"},
 			Help{"help"},
 			Examples{"example1", "example2"},
-			func(Tri) int { return 0 },
+			func(Tri) int {
+				return 0
+			},
 		},
 	},
 }
