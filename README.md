@@ -7,6 +7,8 @@ Virtually all CLI args/configuration libraries written in Go have several irrita
 - Verbose system of parameter setting methods (a bit of the previous plus really ugly syntax)
 - Configuring defaults is often completely manual and thus error prone
 - Even when the configuration composition is automated, it can't easily be parlayed into an existing config structure
+- None of them make the best possible use of Go's compound data types declaration syntax
+- Nearly none are designed to enable the direct filling of arbitrary configuration structures correctly, necessitating either integration from the ground up on day one, or glue to take one data type and translate it to another.
 
 I have constrained the scope of this library to only cover configuration.
 
