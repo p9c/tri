@@ -22,7 +22,7 @@ By creating a readable syntax for declarations, parsing is handled by the Go com
 
 I considered the idea that to a large extent, the possibility of using named struct fields and its benefit of enforcing structure might have been easier than working purely with slices of interfaces, I came down on the side of the interface because, although it costs me more in the validation code, it costs me less in the declaration, the syntax of named fields is not as slim as what is permitted for slices, such as the omission of types at the head of each element of a slice literal.
 
-It also eliminated the need for quite as much type assertion and type switching because all of the outer-level containers are the same type and don't need to be resolved, in order to enable arbitrary sequence of elements and omission undefined fields.
+It also eliminated the need for quite as much type assertion and type switching because all of the outer-level containers are the same type and don't need to be resolved, in order to enable arbitrary sequence of elements and omitting undefined fields.
 
 ## Comprehensive input sanitisers for app declarations
 
