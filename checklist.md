@@ -19,3 +19,8 @@
    - [x] `Usage.Validate()`
    - [ ] `Var.Validate()`
    - [x] `Version.Validate()`
+
+## Documentation
+
+   - [x] Markdown declaration syntax description
+   - [x] godoc comments properly formatted and reasonably complete

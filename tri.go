@@ -75,6 +75,9 @@ type Default Tri
 // DefaultCommand specifies the Command that should run when no subcommand is specified on the commandline.
 type DefaultCommand Tri
 
+// DefaultOn specifies that the trigger it is inside is disabled by its name appearing in the invocation.
+type DefaultOn Tri
+
 // Examples is is a list of pairs of strings containing a snippet of an example invocation and a short description of the effect of this example.
 type Examples Tri
 
