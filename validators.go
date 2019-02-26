@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Brief only contains one thing, so we make sure it has it - one string. This string may not contain any type of control characters, and is limited to 80 characters in length
 func (
 	r *Brief,
@@ -32,7 +32,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items
 func (
 	r *Command,
@@ -97,7 +97,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items
 func (
 	r *Commands,
@@ -113,7 +113,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // The only constraint on the Default subtype is that it contains at only one element, the value is checked for correct typing by the Commands validator
 func (
 	r *Default,
@@ -126,7 +126,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraint of DefaultCommand is that it has at least one element, and that the 0 element is a string. The check for the command name's presence in the Commands set is in the Tri validator
 func (
 	r *DefaultCommand,
@@ -144,7 +144,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraints of examples are minimum 1 element and all elements are strings
 func (
 	r *Examples,
@@ -166,7 +166,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // A group must contain one string, anything else is invalid
 func (
 	r *Group,
@@ -183,7 +183,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Help may only contain one string
 func (
 	r *Help,
@@ -200,7 +200,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // RunAfter is a simple flag that indicates by existence of an empty value, so error if it has anything inside it
 func (
 	r *RunAfter,
@@ -214,7 +214,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Short names contain only a single Rune variable
 func (
 	r *Short,
@@ -231,7 +231,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Slot may only contain one type of element. The type check is in the Var, here we only ensure the slots contain pointers to the same type, the parser will put the final parsed value in all of them. Multiple variables are permitted here to enable the configuration of more than one application
 func (
 	r *Slot,
@@ -252,7 +252,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Terminates is a flag value, and may not contain anything
 func (
 	r *Terminates,
@@ -265,7 +265,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri
 func (
 	r *Tri,
@@ -342,7 +342,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Trigger must contain (one) name, Brief and Handler, and nothing other than these and Short, Usage, Help, Default, Terminates, RunAfter
 func (
 	r *Trigger,
@@ -436,7 +436,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Usage fields contain only one string of no more than 80 characters and no control characters
 func (
 	r *Usage,
@@ -461,7 +461,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // Var must contain name, Brief and Slot, and optionally, Short, Usage, Help and Default. The type in the Slot and the Default must be the same.
 func (
 	r *Var,
@@ -470,7 +470,7 @@ func (
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // A version item contains three integers and an optional (less than 16 character) string, and the numbers may not be more than 99
 func (
 	r *Version,
