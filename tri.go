@@ -139,7 +139,6 @@ type Version Tri
 var exampleTri = Tri{
 	"appname",
 	Brief{"brief"},
-	Usage{"usage"},
 	Version{0, 1, 1, "alpha"},
 	DefaultCommand{"help"},
 	Var{"datadir",
@@ -174,7 +173,7 @@ var exampleTri = Tri{
 				Brief{"brief"},
 				Usage{"usage"},
 				Help{"help"},
-				Default{},
+				DefaultOn{},
 				Terminates{},
 				RunAfter{},
 				func(Tri) int {
