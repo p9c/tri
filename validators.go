@@ -105,7 +105,7 @@ func (r *Command) Validate() error {
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
-// This validator only triggers the validator on its elements
+// This validator only triggers the validator on its elements.
 func (r *Commands) Validate() error {
 
 	R := (*r)
@@ -126,6 +126,9 @@ func (r *Default) Validate() error {
 	if len(R) != 1 {
 		return errors.New("the Default container must only contain one element")
 	}
+	if e := ValidName(R[0].(string)); e != nil {
+		return fmt.Errorf("error in Default: %v", e)
+	}
 	return nil
 }
 
@@ -141,6 +144,9 @@ func (r *DefaultCommand) Validate() error {
 	_, ok := R[0].(string)
 	if !ok {
 		return errors.New("element 0 of DefaultCommand must be a string")
+	}
+	if e := ValidName(R[0].(string)); e != nil {
+		return fmt.Errorf("error in DefaultCommand: %v", e)
 	}
 	return nil
 }
@@ -160,6 +166,14 @@ func (r *Examples) Validate() error {
 		_, ok := x.(string)
 		if !ok {
 			return fmt.Errorf("Examples elements may only be strings, element %d is not a string", i)
+		}
+	}
+	for i := 0; i < len(R); i += 2 {
+		for i, x := range R[i].(string) {
+			if unicode.IsControl(x) {
+				return fmt.Errorf(
+					"Examples even numbered field string may not contain control characters, one found at index %d", i)
+			}
 		}
 	}
 	return nil
