@@ -24,9 +24,9 @@ func (
 	if len(s) > 80 {
 		return errors.New("Brief's text may not be over 80 characters in length")
 	}
-	for _, x := range s {
+	for i, x := range s {
 		if unicode.IsControl(x) {
-			return errors.New("Brief text may not contain any control characters")
+			return fmt.Errorf("Brief text may not contain any control characters, one found at index %d", i)
 		}
 	}
 	return nil
@@ -50,23 +50,43 @@ func (
 	var validSet [2]bool
 	brief, handler := 0, 1
 	for i, x := range R[1:] {
-		switch x.(type) {
+		switch c := x.(type) {
 		case Short:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
 		case Brief:
 			if validSet[brief] {
 				return fmt.Errorf("only one Brief permitted in a Command, second found at index %d", i)
 			}
 		case Usage:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
+
 		case Help:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
 		case Examples:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
+
 		case Var:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
 		case Trigger:
-		//
+			e := c.Valid()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
 		case Handler:
 			if validSet[handler] {
 				return fmt.Errorf("only one Handler permitted in a Command, second found at index %d", i)
