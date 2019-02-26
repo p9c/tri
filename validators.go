@@ -26,7 +26,7 @@ func (
 	}
 	for i, x := range s {
 		if unicode.IsControl(x) {
-			return fmt.Errorf("Brief text may not contain any control characters, one found at index %d", i)
+			return fmt.Errorf("Brief text may not contain any control characters, one found at position %d", i)
 		}
 	}
 	return nil
