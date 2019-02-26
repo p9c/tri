@@ -20,6 +20,10 @@ The declaration types used by Tri are designed to combine readability with type-
 
 By creating a readable syntax for declarations, parsing is handled by the Go compiler and reduces the need for some arbitrary object notation syntax (json, toml, csv, xml, do we really need more of them???), the other thing is that it is much more complicated to bind go executable code into such structures anyway.
 
+I considered the idea that to a large extent, the possibility of using named struct fields and its benefit of enforcing structure might have been easier than working purely with slices of interfaces, I came down on the side of the interface because, although it costs me more in the validation code, it costs me less in the declaration, the syntax of named fields is not as slim as what is permitted for slices, such as the omission of types at the head of each element of a slice literal.
+
+It also eliminated the need for quite as much type assertion and type switching because all of the outer-level containers are the same type and don't need to be resolved, in order to enable arbitrary sequence of elements and omission undefined fields.
+
 ## Comprehensive input sanitisers for app declarations
 
 The validators are very strict, and implement the checking that is not possible to enforce at runtime either due to Go's design or the nature of the specification. It is intended also that this library serves as an example of how 'generic' types are correctly implemented in Go, in that in essence the declarations are a subset of Go.
