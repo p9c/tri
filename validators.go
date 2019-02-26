@@ -9,9 +9,7 @@ import (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Brief only contains one thing, so we make sure it has it - one string. This string may not contain any type of control characters, and is limited to 80 characters in length
-func (
-	r *Brief,
-) Valid() error {
+func (r *Brief) Valid() error {
 
 	R := (*r)
 	if len(R) < 1 {
@@ -34,9 +32,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items
-func (
-	r *Command,
-) Valid() error {
+func (r *Command) Valid() error {
 
 	R := *r
 	s, ok := R[0].(string)
@@ -99,9 +95,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items
-func (
-	r *Commands,
-) Valid() error {
+func (r *Commands) Valid() error {
 
 	R := (*r)
 	for i, x := range R {
@@ -115,9 +109,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The only constraint on the Default subtype is that it contains at only one element, the value is checked for correct typing by the Commands validator
-func (
-	r *Default,
-) Valid() error {
+func (r *Default) Valid() error {
 
 	R := (*r)
 	if len(R) != 1 {
@@ -128,9 +120,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraint of DefaultCommand is that it has at least one element, and that the 0 element is a string. The check for the command name's presence in the Commands set is in the Tri validator
-func (
-	r *DefaultCommand,
-) Valid() error {
+func (r *DefaultCommand) Valid() error {
 
 	R := (*r)
 	if len(R) < 1 {
@@ -146,9 +136,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraints of examples are minimum 1 element and all elements are strings
-func (
-	r *Examples,
-) Valid() error {
+func (r *Examples) Valid() error {
 
 	R := *r
 	if len(R) < 1 {
@@ -168,9 +156,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A group must contain one string, anything else is invalid
-func (
-	r *Group,
-) Valid() error {
+func (r *Group) Valid() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -185,9 +171,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Help may only contain one string
-func (
-	r *Help,
-) Valid() error {
+func (r *Help) Valid() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -202,9 +186,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // RunAfter is a simple flag that indicates by existence of an empty value, so error if it has anything inside it
-func (
-	r *RunAfter,
-) Valid() error {
+func (r *RunAfter) Valid() error {
 
 	R := *r
 	if len(R) > 0 {
@@ -216,9 +198,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Short names contain only a single Rune variable
-func (
-	r *Short,
-) Valid() error {
+func (r *Short) Valid() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -233,9 +213,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Slot may only contain one type of element. The type check is in the Var, here we only ensure the slots contain pointers to the same type, the parser will put the final parsed value in all of them. Multiple variables are permitted here to enable the configuration of more than one application
-func (
-	r *Slot,
-) Valid() error {
+func (r *Slot) Valid() error {
 
 	R := *r
 	var slotTypes []reflect.Type
@@ -254,9 +232,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Terminates is a flag value, and may not contain anything
-func (
-	r *Terminates,
-) Valid() error {
+func (r *Terminates) Valid() error {
 
 	R := *r
 	if len(R) > 0 {
@@ -267,9 +243,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri
-func (
-	r *Tri,
-) Valid() error {
+func (r *Tri) Valid() error {
 	R := *r
 	if len(R) < 4 {
 		return errors.New("a Tri must contain at least 4 elements: name, Brief, Version and Commands")
@@ -344,9 +318,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Trigger must contain (one) name, Brief and Handler, and nothing other than these and Short, Usage, Help, Default, Terminates, RunAfter
-func (
-	r *Trigger,
-) Valid() error {
+func (r *Trigger) Valid() error {
 
 	R := *r
 	if len(R) < 3 {
@@ -438,9 +410,7 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Usage fields contain only one string of no more than 80 characters and no control characters
-func (
-	r *Usage,
-) Valid() error {
+func (r *Usage) Valid() error {
 	R := *r
 	if len(R) > 1 {
 		return errors.New("Usage field must contain (only) one string")
@@ -463,18 +433,14 @@ func (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Var must contain name, Brief and Slot, and optionally, Short, Usage, Help and Default. The type in the Slot and the Default must be the same.
-func (
-	r *Var,
-) Valid() error {
+func (r *Var) Valid() error {
 
 	return nil
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A version item contains three integers and an optional (less than 16 character) string, and the numbers may not be more than 99
-func (
-	r *Version,
-) Valid() error {
+func (r *Version) Valid() error {
 
 	R := *r
 	if len(R) > 4 {
