@@ -56,12 +56,15 @@ func (r *Command) Validate() error {
 			if validSet[brief] {
 				return fmt.Errorf("only one Brief permitted in a Command, second found at index %d", i)
 			}
+			e := c.Validate()
+			if e != nil {
+				return fmt.Errorf("error in Command at index %d: %v", i, e)
+			}
 		case Usage:
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
-
 		case Help:
 			e := c.Validate()
 			if e != nil {
@@ -72,7 +75,6 @@ func (r *Command) Validate() error {
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
-
 		case Var:
 			e := c.Validate()
 			if e != nil {
@@ -87,14 +89,23 @@ func (r *Command) Validate() error {
 			if validSet[handler] {
 				return fmt.Errorf("only one Handler permitted in a Command, second found at index %d", i)
 			}
+			if c == nil {
+				return fmt.Errorf("nil handler in Command found at index %d", i)
+			}
 		default:
 		}
+	}
+	if !validSet[brief] {
+		return errors.New("Brief field must be present")
+	}
+	if !validSet[handler] {
+		return errors.New("Command must have a handler")
 	}
 	return nil
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
-// This validator only has to check the elements of the slice are zero or more valid Command items.
+// This validator only triggers the validator on its elements
 func (r *Commands) Validate() error {
 
 	R := (*r)
