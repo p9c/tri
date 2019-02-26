@@ -1,4 +1,4 @@
-// Package Tri is an implementation of a simple abstract container type that uses type derivation to concisely designate different types of elements that can be captured using type switches.
+// Package Tri is a library for defining the configuration parameters for a CLI application, managing the configuration files, application data directory, defining subcommands, parameters, default values and automatically loading configuration structures with the processed configuration.
 //
 // The primary construct used in Go to implement generic types is the interface, and to implement any kind of structure that involves lists, the slice-of-interface []interface{} is a structure that can hold zero or more items of any type whatsoever.
 //
@@ -35,7 +35,7 @@ import (
 //
 // Constraints are not the most visible feature of generic types, but if constraints aren't applied to generic types they can be very hard bugs to spot, and simply do not occur if you first check the parts of the structures are correct.
 type Branch interface {
-	Valid() error
+	Validate() error
 }
 
 // TODO: write the english version of what structure each of these has

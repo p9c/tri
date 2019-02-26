@@ -9,7 +9,7 @@ import (
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Brief only contains one thing, so we make sure it has it - one string. This string may not contain any type of control characters, and is limited to 80 characters in length.
-func (r *Brief) Valid() error {
+func (r *Brief) Validate() error {
 
 	R := (*r)
 	if len(R) < 1 {
@@ -32,7 +32,7 @@ func (r *Brief) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items, and a valid name at index 0.
-func (r *Command) Valid() error {
+func (r *Command) Validate() error {
 
 	R := *r
 	s, ok := R[0].(string)
@@ -48,7 +48,7 @@ func (r *Command) Valid() error {
 	for i, x := range R[1:] {
 		switch c := x.(type) {
 		case Short:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
@@ -57,29 +57,29 @@ func (r *Command) Valid() error {
 				return fmt.Errorf("only one Brief permitted in a Command, second found at index %d", i)
 			}
 		case Usage:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 
 		case Help:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 		case Examples:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 
 		case Var:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 		case Trigger:
-			e := c.Valid()
+			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
@@ -95,11 +95,11 @@ func (r *Command) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more valid Command items.
-func (r *Commands) Valid() error {
+func (r *Commands) Validate() error {
 
 	R := (*r)
 	for i, x := range R {
-		e := x.Valid()
+		e := x.Validate()
 		if e != nil {
 			return fmt.Errorf("error in element %d of Commands list: %v", i, e)
 		}
@@ -109,7 +109,7 @@ func (r *Commands) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The only constraint on the Default subtype is that it contains at only one element, the value is checked for correct typing by the Commands validator.
-func (r *Default) Valid() error {
+func (r *Default) Validate() error {
 
 	R := (*r)
 	if len(R) != 1 {
@@ -120,7 +120,7 @@ func (r *Default) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraint of DefaultCommand is that it has at least one element, and that the 0 element is a string. The check for the command name's presence in the Commands set is in the Tri validator.
-func (r *DefaultCommand) Valid() error {
+func (r *DefaultCommand) Validate() error {
 
 	R := (*r)
 	if len(R) < 1 {
@@ -136,7 +136,7 @@ func (r *DefaultCommand) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraints of examples are minimum two elements and all elements are strings. The intent is the even numbered items are snippets showing invocation and a description string of the same format as Brief{}.
-func (r *Examples) Valid() error {
+func (r *Examples) Validate() error {
 
 	R := *r
 	if len(R) < 1 {
@@ -156,7 +156,7 @@ func (r *Examples) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A group must contain one string, anything else is invalid.
-func (r *Group) Valid() error {
+func (r *Group) Validate() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -171,7 +171,7 @@ func (r *Group) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Help may only contain one string.
-func (r *Help) Valid() error {
+func (r *Help) Validate() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -186,7 +186,7 @@ func (r *Help) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // RunAfter is a simple flag that indicates by existence of an empty value, so it is an error if it has anything inside it.
-func (r *RunAfter) Valid() error {
+func (r *RunAfter) Validate() error {
 
 	R := *r
 	if len(R) > 0 {
@@ -198,7 +198,7 @@ func (r *RunAfter) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Short names contain only a single Rune variable.
-func (r *Short) Valid() error {
+func (r *Short) Validate() error {
 
 	R := *r
 	if len(R) != 1 {
@@ -213,7 +213,7 @@ func (r *Short) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Slot may only contain one type of element. The type check is in the Var, here we only ensure the slots contain pointers to the same type, the parser will put the final parsed value in all of them. Multiple variables are permitted here to enable the configuration of more than one application.
-func (r *Slot) Valid() error {
+func (r *Slot) Validate() error {
 
 	R := *r
 	var slotTypes []reflect.Type
@@ -232,7 +232,7 @@ func (r *Slot) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Terminates is a flag value, and may not contain anything.
-func (r *Terminates) Valid() error {
+func (r *Terminates) Validate() error {
 
 	R := *r
 	if len(R) > 0 {
@@ -243,7 +243,7 @@ func (r *Terminates) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri.
-func (r *Tri) Valid() error {
+func (r *Tri) Validate() error {
 	R := *r
 	if len(R) < 4 {
 		return errors.New("a Tri must contain at least 4 elements: name, Brief, Version and Commands")
@@ -264,7 +264,7 @@ func (r *Tri) Valid() error {
 					"Tri contains more than one Brief, second found at index %d", i)
 			}
 			validSet[brief] = true
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 		case Version:
@@ -272,7 +272,7 @@ func (r *Tri) Valid() error {
 				return fmt.Errorf(
 					"Tri contains more than one Version, second found at index %d", i)
 			}
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 			validSet[version] = true
@@ -282,18 +282,18 @@ func (r *Tri) Valid() error {
 					"Tri contains more than one Commands, second found at index %d", i)
 			}
 			validSet[commands] = true
-			e := y.Valid()
+			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 			// (mostly) Empty conditions only to filter out element types that are not valid in a Tri (default case will trigger for any type not in the set)
 		case Usage:
-			e := y.Valid()
+			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 		case DefaultCommand:
-			e := y.Valid()
+			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
@@ -318,7 +318,7 @@ func (r *Tri) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Trigger must contain (one) name, Brief and Handler, and nothing other than these and Short, Usage, Help, Default, Terminates, RunAfter.
-func (r *Trigger) Valid() error {
+func (r *Trigger) Validate() error {
 
 	R := *r
 	if len(R) < 3 {
@@ -340,7 +340,7 @@ func (r *Trigger) Valid() error {
 		switch y := x.(type) {
 
 		case Brief:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
@@ -362,37 +362,37 @@ func (r *Trigger) Valid() error {
 			}
 
 		case Short:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Usage:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Help:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Default:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Terminates:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case RunAfter:
-			if e := y.Valid(); e != nil {
+			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
@@ -410,7 +410,7 @@ func (r *Trigger) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Usage fields contain only one string of no more than 80 characters and no control characters.
-func (r *Usage) Valid() error {
+func (r *Usage) Validate() error {
 	R := *r
 	if len(R) > 1 {
 		return errors.New("Usage field must contain (only) one string")
@@ -433,14 +433,14 @@ func (r *Usage) Valid() error {
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // Var must contain name, Brief and Slot, and optionally, Short, Usage, Help and Default. The type in the Slot and the Default must be the same.
-func (r *Var) Valid() error {
+func (r *Var) Validate() error {
 
 	return nil
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
 // A version item contains three integers and an optional (less than 16 character) string, and the numbers may not be more than 99.
-func (r *Version) Valid() error {
+func (r *Version) Validate() error {
 
 	R := *r
 	if len(R) > 4 {
