@@ -172,19 +172,30 @@ func (r *DefaultOn) Validate() error {
 func (r *Examples) Validate() error {
 
 	R := *r
-	if len(R) < 1 {
+	if len(R) < 2 {
 		return errors.New("Examples field may not be empty")
 	}
 	if len(R)%2 != 0 {
-		return fmt.Errorf("Examples must be in pairs, odd number of elements found")
+		return fmt.Errorf(
+			"Examples must be in pairs, odd number of elements found")
 	}
 	for i, x := range R {
 		_, ok := x.(string)
 		if !ok {
-			return fmt.Errorf("Examples elements may only be strings, element %d is not a string", i)
+			return fmt.Errorf(
+				"Examples elements may only be strings, element %d is not a string", i)
 		}
 	}
-	for i := 0; i < len(R); i += 2 {
+
+	for i := 1; i <= len(R)-1; i += 2 {
+		if len(R[i-1].(string)) > 40 {
+			return errors.New(
+				"Examples example text may not be over 4 characters in length")
+		}
+		if len(R[i].(string)) > 80 {
+			return errors.New(
+				"Examples explainer text may not be over 80 characters in length")
+		}
 		for i, x := range R[i].(string) {
 			if unicode.IsControl(x) {
 				return fmt.Errorf(

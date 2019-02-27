@@ -182,18 +182,61 @@ func TestDefaultOn(t *testing.T) {
 func TestExamples(t *testing.T) {
 
 	// must not be empty
+	te1 := Examples{}
+	e := te1.Validate()
+	if e == nil {
+		t.Error("validator invalid empty Examples")
+	}
 
 	// must have pairs of elements
+	te2 := Examples{"1", 2, 3.0}
+	e = te2.Validate()
+	if e == nil {
+		t.Error("validator permitted odd number of items in Examples")
+	}
 
 	// elements must be strings
+	te3 := Examples{"1", 2}
+	e = te3.Validate()
+	if e == nil {
+		t.Error("validator permitted non-string in Examples")
+	}
+
+	// string length < 80
+	te4 := Examples{
+		"--max=0", "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+	}
+	e = te4.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
+
+	// string length < 80
+	te5 := Examples{
+		"a1234567890123456789012345678901234567890", "123",
+	}
+	e = te5.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
 
 	// even numbered (first in pair) elements have no control characters
+	te6 := Examples{
+		"--max=0", "aaa\n",
+	}
+	e = te6.Validate()
+	if e == nil {
+		t.Error("validator permitted control character in explainer")
+	}
 
-	// contains only one element
-
-	// element is a string
-
-	// string is a ValidName
+	// no error
+	te7 := Examples{
+		"--max=0", "aaaaaaaa",
+	}
+	e = te7.Validate()
+	if e == nil {
+		t.Error("validator rejected valid example")
+	}
 
 }
 

@@ -71,12 +71,15 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] must be empty
       - [x] no error!
 
-   - [ ] `Examples.Validate()`
+   - [x] `Examples.Validate()`
 
-      - [ ] must not be empty
-      - [ ] must have pairs of elements
-      - [ ] elements must be strings
-      - [ ] even numbered (first in pair) elements have no control characters
+      - [x] must not be empty
+      - [x] must have pairs of elements
+      - [x] elements must be strings
+      - [x] even numbered (first in pair) elements have no control characters
+      - [x] first field longer than 40 characters
+      - [x] second field longer than 80 characters
+      - [x] no error!
 
    - [ ] `Group.Validate()`
 
