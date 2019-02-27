@@ -1,12 +1,13 @@
 # Checklist for completion of components of Tri
 
-## Validators
+## Validators - initial draft
 
    - [x] `Brief.Validate()`
    - [x] `Command.Validate()`
    - [x] `Commands.Validate()`
    - [x] `Default.Validate()`
    - [x] `DefaultCommand.Validate()`
+   - [x] `DefaultOn.Validate()`
    - [x] `Examples.Validate()`
    - [x] `Group.Validate()`
    - [x] `Help.Validate()`
@@ -14,11 +15,12 @@
    - [x] `Short.Validate()`
    - [x] `Slot.Validate()`
    - [x] `Terminates.Validate()`
-   - [ ] `Tri.Validate()`
-   - [ ] `Trigger.Validate()`
+   - [x] `Tri.Validate()`
+   - [x] `Trigger.Validate()`
    - [x] `Usage.Validate()`
-   - [ ] `Var.Validate()`
+   - [x] `Var.Validate()`
    - [x] `Version.Validate()`
+   - [x] `tri.ValidName()`
 
 ## Documentation
 

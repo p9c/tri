@@ -12,8 +12,6 @@
 //
 // In spite of it being perhaps less logical, all elements of a Tri are a derivative of a Tri. This way one never has to type assert the container, only the contents, and in most cases, the possible types depend on the type of a branch.
 //
-// Most generics systems used in other languages, and default parameters have the ability to set constraints on the contents of the node. Instead, Tri has an interface called Branch, which has a single method Valid(). This function returns true if the mandatory items are present, and all other items have values within the acceptable range required by the implementation.
-//
 // Declaration Syntax Validation
 //
 // Validators for each type in this package automatically trigger the validators for their (valid set of) constituent elements, so only one Valid() invocation is needed, on the Tri type. If Valid functions return an error, it passes back through the cascade to the root where it is printed to tell (the proogrammer) that their declaration was erroneous.

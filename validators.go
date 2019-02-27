@@ -152,6 +152,18 @@ func (r *DefaultCommand) Validate() error {
 }
 
 // Valid checks to ensure the contents of this node type satisfy constraints.
+// RunAfter is a simple flag that indicates by existence of an empty value, so it is an error if it has anything inside it.
+func (r *DefaultOn) Validate() error {
+
+	R := *r
+	if len(R) > 0 {
+		return errors.New(
+			"DefaultOn may not contain anything, empty declaration only")
+	}
+	return nil
+}
+
+// Valid checks to ensure the contents of this node type satisfy constraints.
 // The constraints of examples are minimum two elements and all elements are strings. The intent is the even numbered items are snippets showing invocation and a description string of the same format as Brief{}.
 func (r *Examples) Validate() error {
 
@@ -279,10 +291,15 @@ func (r *Tri) Validate() error {
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [4]bool
 	brief, version, commands := 1, 2, 3
-	_, ok := R[0].(string)
+	var def bool
+	n, ok := R[0].(string)
 	if !ok {
 		return errors.New("first element of a Tri must be the application name")
 	}
+	if e := ValidName(n); e != nil {
+		return fmt.Errorf("error in name of Command: %v", e)
+	}
+
 	// The mandatory elements also may not be repeated:
 	for i, x := range R[1:] {
 		switch y := x.(type) {
@@ -312,22 +329,36 @@ func (r *Tri) Validate() error {
 			validSet[commands] = true
 			e := y.Validate()
 			if e != nil {
-				return fmt.Errorf("Tri field %d: %s", i, e)
+				return fmt.Errorf("error in Tri field %d: %s", i, e)
 			}
 			// (mostly) Empty conditions only to filter out element types that are not valid in a Tri (default case will trigger for any type not in the set)
+		case Var:
+			e := y.Validate()
+			if e != nil {
+				return fmt.Errorf("error in Tri at index %d: %v", i, e)
+			}
+		case Trigger:
+			e := y.Validate()
+			if e != nil {
+				return fmt.Errorf("error in Tri at index %d: %v", i, e)
+			}
 		case Usage:
 			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 		case DefaultCommand:
+			if def {
+				return fmt.Errorf("extra DefaultCommand found at index %d", i)
+			}
+			def = true
 			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 		default:
 			return fmt.Errorf(
-				"Tri contains an element type it may not contain, at index %d", i)
+				"Tri contains an element type it may not contain at index %d", i)
 		}
 	}
 	switch {
@@ -359,7 +390,7 @@ func (r *Trigger) Validate() error {
 	} else if e := ValidName(name); e != nil {
 		return fmt.Errorf("Invalid Name in Trigger at index 0: %v", e)
 	}
-	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
+	// validSet is an array that represent the presence of the mandatory parts.
 	var validSet [2]bool
 	brief, handler := 0, 1
 	// check for presence of all mandatory and non-presence of impermissible element types.
@@ -384,7 +415,7 @@ func (r *Trigger) Validate() error {
 			}
 			if validSet[handler] {
 				return fmt.Errorf(
-					"Trigger may must (only) contain one Brief, second found at index %d", i)
+					"Trigger may must (only) contain one Handler, second found at index %d", i)
 			} else {
 				validSet[handler] = true
 			}
@@ -407,7 +438,7 @@ func (r *Trigger) Validate() error {
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
-		case Default:
+		case DefaultOn:
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
@@ -463,6 +494,83 @@ func (r *Usage) Validate() error {
 // Var must contain name, Brief and Slot, and optionally, Short, Usage, Help and Default. The type in the Slot and the Default must be the same.
 func (r *Var) Validate() error {
 
+	R := *r
+	if len(R) < 3 {
+		return errors.New(
+			"Trigger must contain a name, Brief and Handler at minimum")
+	}
+	name, ok := R[0].(string)
+	if !ok {
+		return errors.New("first element of Trigger must be the name")
+	} else if e := ValidName(name); e != nil {
+		return fmt.Errorf("Invalid Name in Trigger at index 0: %v", e)
+	}
+	// validSet is an array that represent the presence of the mandatory parts.
+	var validSet [2]bool
+	brief, handler := 0, 1
+	var def, slot bool
+	// check for presence of all mandatory and non-presence of impermissible element types.
+	for i, x := range R[1:] {
+
+		switch y := x.(type) {
+
+		case Brief:
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+			if validSet[brief] {
+				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
+			} else {
+				validSet[brief] = true
+			}
+
+		case Short:
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+
+		case Usage:
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+
+		case Help:
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+
+		case Default:
+			if def {
+				return fmt.Errorf("Trigger may only contain one Default, extra found at index %d", i)
+			}
+			def = true
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+
+		case Slot:
+			if slot {
+				return fmt.Errorf("Trigger may only contain one Default, extra found at index %d", i)
+			}
+			slot = true
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d :%s", i, e)
+			}
+
+		default:
+			return fmt.Errorf(
+				"found invalid item type at element %d in a Trigger", i)
+		}
+	}
+	if !(validSet[brief] && validSet[handler]) {
+		return errors.New("Trigger must contain one each of Brief and Handler")
+	}
 	return nil
 }
 

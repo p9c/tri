@@ -80,7 +80,7 @@ Commands is just an array of Command, containing zero or more Command items.
 
 ## `Tri`
 
-Tri is the top-level definition for the application, it reqires the `name`, `Brief` and `Version` fields, and optionally a Commands item and zero or more Var items. 
+Tri is the top-level definition for the application, it reqires the `name`, `Brief` and `Version` fields, and optionally a Commands item and zero or more Var and Trigger items.
 
 The `Var` fields define values that are common to all or most of the `Command` fields.
 
@@ -93,13 +93,25 @@ Below is all of the elements within their valid positions (only `name` fields mu
          Brief{""}, *1
          Version{0, 1, 1, "alpha"}, *1
          DefaultCommand{""}, 1
-         Var{"name", *1
+         Var{"name", 
             Short{"d"}, 1
             Brief{"brief"}, *1
             Usage{"usage"}, 1
             Help{"help"}, 1
             Default{"~/.pod"}, 1
             Slot{""}, 1
+         },
+         Trigger{"init", 
+            Short{"I"}, 1
+            Brief{"brief"}, *1
+            Usage{"usage"}, 1
+            Help{"help"}, 1
+            DefaultOn{}, 1
+            Terminates{}, 1
+            RunAfter{}, 1
+            func(Tri) int { *1
+               return 0
+            },
          },
          Commands{
             {"ctl", *1
@@ -111,19 +123,8 @@ Below is all of the elements within their valid positions (only `name` fields mu
                Examples{ 1
                   "example 1", "explaining text", (pairs of strings)
                },
-               Var{}, *1
-               Trigger{"init", *1
-                  Short{"I"}, 1
-                  Brief{"brief"}, *1
-                  Usage{"usage"}, 1
-                  Help{"help"}, 1
-                  DefaultOn{}, 1
-                  Terminates{}, 1
-                  RunAfter{}, 1
-                  func(Tri) int { *1
-                     return 0
-                  },
-               },
+               Var{}, 1
+               Trigger{}, 1
                func(Tri) int { *1
                },
             },
