@@ -7,12 +7,56 @@ import (
 func TestBrief(t *testing.T) {
 
 	// one item only
+	tb1 := Brief{
+		"item1", "item2",
+	}
+	e := tb1.Validate()
+	if e == nil {
+		t.Error("validator allowed more than one")
+	}
 
 	// string typed item
+	tb2 := Brief{
+		1,
+	}
+	e = tb2.Validate()
+	if e == nil {
+		t.Error("validator permitted other than a string")
+	}
 
 	// string length < 80
+	tb3 := Brief{
+		"123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+	}
+	e = tb3.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
 
 	// no control characters
+	tb4 := Brief{
+		"this should not have a cr at the end\n",
+	}
+	e = tb4.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
+
+	tb5 := Brief{
+		"this should not have a cr at the end\n",
+	}
+	e = tb5.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
+
+	tb6 := Brief{
+		"this is ok",
+	}
+	e = tb6.Validate()
+	if e != nil {
+		t.Error("validator rejected correct input")
+	}
 
 }
 
@@ -45,6 +89,13 @@ func TestCommands(t *testing.T) {
 }
 
 func TestDefault(t *testing.T) {
+
+	// only one item
+
+	// item is string
+
+	// item is a ValidName
+
 }
 
 func TestDefaultCommand(t *testing.T) {

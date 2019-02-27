@@ -12,7 +12,7 @@ import (
 func (r *Brief) Validate() error {
 
 	R := (*r)
-	if len(R) < 1 {
+	if len(R) != 1 {
 		return errors.New("Brief field must have (only) one item")
 	}
 	s, ok := R[0].(string)

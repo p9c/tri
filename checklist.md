@@ -30,12 +30,13 @@ Each validator has several error conditions, so each of them are elaborated unde
 
 - [x] Test stubs written
 
-   - [ ] `Brief.Validate()`
+   - [x] `Brief.Validate()`
 
-      - [ ] one item only
-      - [ ] string typed item
-      - [ ] string length < 80
-      - [ ] no control characters
+      - [x] one item only
+      - [x] string typed item
+      - [x] string length < 80
+      - [x] no control characters
+      - [x] no error!
 
    - [ ] `Command.Validate()`
 
@@ -91,7 +92,7 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [ ] `Short.Validate()`
 
-      - [ ] contains only one elemennt
+      - [ ] contains only one element
       - [ ] element is a rune (single character/unicode point)
 
    - [ ] `Slot.Validate()`
