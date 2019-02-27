@@ -2,7 +2,7 @@
 
 ## Syntax Definition Pseudocode
 
-Below is all of the elements within their valid positions (only `name` fields must have specific position), * indicates mandatory and 1 indicates only one is permitted:
+Below is all of the elements within their valid positions (only `name` fields must have specific position within the containing Tri), * indicates mandatory and 1 indicates only one is permitted:
 
       Tri{
          "name", *1
