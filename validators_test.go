@@ -80,32 +80,85 @@ func TestCommand(t *testing.T) {
 
 func TestCommands(t *testing.T) {
 
-	// only one item
-
-	// item is string
-
-	// item is a ValidName
-
 }
 
 func TestDefault(t *testing.T) {
 
 	// only one item
+	td1 := Default{
+		"item1", "item2",
+	}
+	e := td1.Validate()
+	if e == nil {
+		t.Error("validator allowed more than one")
+	}
 
 	// item is string
+	td2 := Default{
+		1,
+	}
+	e = td2.Validate()
+	if e == nil {
+		t.Error("validator permitted other than a string")
+	}
 
 	// item is a ValidName
+	td3 := Default{
+		"abc123",
+	}
+	e = td3.Validate()
+	if e == nil {
+		t.Error("validator permitted an invalid name")
+	}
+
+	// item is a valid
+	td4 := Default{
+		"abc",
+	}
+	e = td4.Validate()
+	if e != nil {
+		t.Error("validator rejected a valid name")
+	}
 
 }
 
 func TestDefaultCommand(t *testing.T) {
 
-	// only one element
+	// only one item
+	tdc1 := DefaultCommand{
+		"item1", "item2",
+	}
+	e := tdc1.Validate()
+	if e == nil {
+		t.Error("validator allowed more than one")
+	}
 
-	// element is string
+	// item is string
+	tdc2 := DefaultCommand{
+		1,
+	}
+	e = tdc2.Validate()
+	if e == nil {
+		t.Error("validator permitted other than a string")
+	}
 
-	// string is a ValidName
+	// item is a ValidName
+	tdc3 := DefaultCommand{
+		"abc123",
+	}
+	e = tdc3.Validate()
+	if e == nil {
+		t.Error("validator permitted an invalid name")
+	}
 
+	// item is a valid
+	tdc4 := DefaultCommand{
+		"abc",
+	}
+	e = tdc4.Validate()
+	if e != nil {
+		t.Error("validator rejected a valid name")
+	}
 }
 
 func TestDefaultOn(t *testing.T) {

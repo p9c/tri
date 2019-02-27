@@ -52,17 +52,19 @@ Each validator has several error conditions, so each of them are elaborated unde
 
       This array alias has no errors of its own
 
-   - [ ] `Default.Validate()`
+   - [x] `Default.Validate()`
 
-      - [ ] only one item
-      - [ ] item is string
-      - [ ] item is a ValidName
+      - [x] only one item
+      - [x] item is string
+      - [x] item is a ValidName
+      - [x] no error!
 
-   - [ ] `DefaultCommand.Validate()`
+   - [x] `DefaultCommand.Validate()`
 
-      - [ ] only one element
-      - [ ] element is string
-      - [ ] string is a ValidName
+      - [x] only one element
+      - [x] element is string
+      - [x] string is a ValidName
+      - [x] no error!
 
    - [ ] `DefaultOn.Validate()`
 

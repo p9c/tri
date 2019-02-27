@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Brief only contains one thing, so we make sure it has it - one string. This string may not contain any type of control characters, and is limited to 80 characters in length.
 func (r *Brief) Validate() error {
 
@@ -30,7 +30,7 @@ func (r *Brief) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // This validator only has to check the elements of the slice are zero or more Command items, and a valid name at index 0.
 func (r *Command) Validate() error {
 
@@ -104,7 +104,7 @@ func (r *Command) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // This validator only triggers the validator on its elements.
 func (r *Commands) Validate() error {
 
@@ -118,7 +118,7 @@ func (r *Commands) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // The only constraint on the Default subtype is that it contains at only one element, the value is checked for correct typing by the Commands validator.
 func (r *Default) Validate() error {
 
@@ -136,12 +136,12 @@ func (r *Default) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // The constraint of DefaultCommand is that it has at least one element, and that the 0 element is a string. The check for the command name's presence in the Commands set is in the Tri validator.
 func (r *DefaultCommand) Validate() error {
 
 	R := (*r)
-	if len(R) < 1 {
+	if len(R) != 1 {
 		return errors.New(
 			"the DefaultCommand element must contain only one element")
 	}
@@ -155,7 +155,7 @@ func (r *DefaultCommand) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // RunAfter is a simple flag that indicates by existence of an empty value, so it is an error if it has anything inside it.
 func (r *DefaultOn) Validate() error {
 
@@ -167,7 +167,7 @@ func (r *DefaultOn) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // The constraints of examples are minimum two elements and all elements are strings. The intent is the even numbered items are snippets showing invocation and a description string of the same format as Brief{}.
 func (r *Examples) Validate() error {
 
@@ -195,7 +195,7 @@ func (r *Examples) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // A group must contain one string, anything else is invalid. It also has the same limitation as a name - only letters.
 func (r *Group) Validate() error {
 
@@ -213,7 +213,7 @@ func (r *Group) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Help may only contain one string. It will be parsed as markdown format and possibly can be set to style it with ANSI codes.
 func (r *Help) Validate() error {
 
@@ -228,7 +228,7 @@ func (r *Help) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // RunAfter is a simple flag that indicates by existence of an empty value, so it is an error if it has anything inside it.
 func (r *RunAfter) Validate() error {
 
@@ -240,7 +240,7 @@ func (r *RunAfter) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Short names contain only a single Rune variable.
 func (r *Short) Validate() error {
 
@@ -255,7 +255,7 @@ func (r *Short) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Slot may only contain one type of element. The type check is in the Var, here we only ensure the slots contain pointers to the same type, the parser will put the final parsed value in all of them. Multiple variables are permitted here to enable the configuration of more than one application.
 func (r *Slot) Validate() error {
 
@@ -274,7 +274,7 @@ func (r *Slot) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Terminates is a flag value, and may not contain anything.
 func (r *Terminates) Validate() error {
 
@@ -285,7 +285,7 @@ func (r *Terminates) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri.
 func (r *Tri) Validate() error {
 	R := *r
@@ -379,7 +379,7 @@ func (r *Tri) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Trigger must contain (one) name, Brief and Handler, and nothing other than these and Short, Usage, Help, Default, Terminates, RunAfter.
 func (r *Trigger) Validate() error {
 
@@ -471,7 +471,7 @@ func (r *Trigger) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Usage fields contain only one string of no more than 80 characters and no control characters.
 func (r *Usage) Validate() error {
 	R := *r
@@ -494,7 +494,7 @@ func (r *Usage) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // Var must contain name, Brief and Slot, and optionally, Short, Usage, Help and Default. The type in the Slot and the Default must be the same.
 func (r *Var) Validate() error {
 
@@ -578,7 +578,7 @@ func (r *Var) Validate() error {
 	return nil
 }
 
-// Valid checks to ensure the contents of this node type satisfy constraints.
+// Validate checks to ensure the contents of this node type satisfy constraints.
 // A version item contains three integers and an optional (less than 16 character) string, and the numbers may not be more than 99.
 func (r *Version) Validate() error {
 
