@@ -157,6 +157,7 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [x] Markdown declaration syntax description
    - [x] godoc comments properly formatted and reasonably complete
+   - [x] nice checklist (this!)
 
 ## Commandline Parser
 
