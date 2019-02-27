@@ -435,17 +435,26 @@ func TestUsage(t *testing.T) {
 
 func TestValidName(t *testing.T) {
 
-	// contains at least 3 elements
+	// name is 3 or more characters long
+	tvn1 := "ab"
+	e := ValidName(tvn1)
+	if e == nil {
+		t.Error("validator accepted string under 3 characters length")
+	}
 
-	// first is string
+	// name is only composed of letters
+	tvn2 := "ab3"
+	e = ValidName(tvn2)
+	if e == nil {
+		t.Error("validator accepted non-letter characters")
+	}
 
-	// name is ValidName
-
-	// only one Brief
-
-	// only one handler
-
-	// has one each of Brief and Handler
+	// no error!
+	tvn3 := "proper"
+	e = ValidName(tvn3)
+	if e != nil {
+		t.Error("validator rejected valid namme")
+	}
 
 }
 

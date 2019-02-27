@@ -633,6 +633,9 @@ func (r *Version) Validate() error {
 // ValidName checks that a Tri name element that should be a name only contains letters.
 func ValidName(s string) error {
 
+	if len(s) > 3 {
+		return errors.New("name is less than 3 characters long")
+	}
 	for i, x := range s {
 		if !unicode.IsLetter(x) {
 			return fmt.Errorf(

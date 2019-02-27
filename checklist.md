@@ -163,10 +163,11 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] 4th field is a string
       - [ ] string contains only letters and numbers
 
-   - [ ] `tri.ValidName()`
+   - [x] `tri.ValidName()`
 
-      - [ ] contains only letters
-
+      - [x] 3 or more characters length
+      - [x] contains only letters
+      - [x] no error!
 
 ## Documentation
 
