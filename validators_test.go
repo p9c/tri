@@ -234,7 +234,7 @@ func TestExamples(t *testing.T) {
 		"--max=0", "aaaaaaaa",
 	}
 	e = te7.Validate()
-	if e == nil {
+	if e != nil {
 		t.Error("validator rejected valid example")
 	}
 
@@ -243,10 +243,38 @@ func TestExamples(t *testing.T) {
 func TestGroup(t *testing.T) {
 
 	// contains only one element
+	tg1 := Group{1, 1}
+	tg2 := Group{}
+	e := tg1.Validate()
+	if e == nil {
+		t.Error("validator accepted more than one")
+	}
+	e = tg2.Validate()
+	if e == nil {
+		t.Error("validator accepted no elements")
+	}
 
 	// element is a string
+	tg3 := Group{1}
+	e = tg3.Validate()
+	if e == nil {
+		t.Error("validator accepted non string elemeent")
+	}
 
 	// string is a ValidName
+	tg4 := Group{"abc123"}
+	e = tg4.Validate()
+	if e == nil {
+		t.Error("validator accepted invalid name")
+	}
+
+	// no error!
+	tg5 := Group{"abc"}
+	e = tg5.Validate()
+	if e == nil {
+		t.Error("validator rejected valid name")
+	}
+
 }
 
 func TestHelp(t *testing.T) {
@@ -260,6 +288,19 @@ func TestHelp(t *testing.T) {
 func TestRunAfter(t *testing.T) {
 
 	// may not contain anything
+	tra1 := RunAfter{
+		"",
+	}
+	e := tra1.Validate()
+	if e == nil {
+		t.Error("validator accepted content in RunAfter")
+	}
+	// no error
+	tra2 := RunAfter{}
+	e = tra2.Validate()
+	if e != nil {
+		t.Error("validator rejected valid RunAfter")
+	}
 
 }
 

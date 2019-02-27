@@ -81,20 +81,21 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] second field longer than 80 characters
       - [x] no error!
 
-   - [ ] `Group.Validate()`
+   - [x] `Group.Validate()`
 
-      - [ ] contains only one element
-      - [ ] element is a string
-      - [ ] string is a ValidName
+      - [x] contains only one element
+      - [x] element is a string
+      - [x] string is a ValidName
+      - [x] no error!
 
    - [ ] `Help.Validate()`
 
       - [ ] contains only one element
       - [ ] element is a string
 
-   - [ ] `RunAfter.Validate()`
+   - [x] `RunAfter.Validate()`
 
-      - [ ] may not contain anything
+      - [x] may not contain anything
 
    - [ ] `Short.Validate()`
 
