@@ -20,7 +20,7 @@ I have constrained the scope of this library to only cover configuration.
 
 > #### What about logging?
 > 
-> It is not quite complete in that it lacks log rotation and placeholder implementation of logging to file, but https://github.com/parallelcointeam/pod/tree/master/pkg/util/clog is a channel-based logging library I have written that aims to reduce runtime overhead of allocation and function context switching by making the logging path pass through channels, and is designed such that one simple, very short log.go file can be added and entire packages are covered.
+> It is not quite complete in that it lacks log rotation and has only placeholder implementation of logging to file, but https://github.com/parallelcointeam/pod/tree/master/pkg/util/clog is a channel-based logging library I have written that aims to reduce runtime overhead of allocation and function context switching by making the logging path pass through channels, and is designed such that one simple, very short log.go file can be added and entire packages are covered.
 > 
 > Logging system might logically be configurable from configuration but the configuration system itself doesn't really need logging (if it is thoroughly test-covered) and `clog` - or any other logging system you might want to use, needs to be hand-integrated into the packages that use it anyway.
 
