@@ -3,7 +3,9 @@
 [![GoDoc](https://godoc.org/github.com/parallelcointeam/tri?status.svg)](https://godoc.org/github.com/parallelcointeam/tri)
 
 
-Tri is a CLI parameter parsing and configuration library designed to populate app configurations automatically based on defaults, env, config files and CLI args.
+Tri is a CLI parameter parsing and configuration library designed to populate app configurations automatically based on defaults, config files and CLI args.
+
+> Note: Environment variables are not handled by this library because they are not likely to be used by users of [pod](https://git.parallelcoin.io/pod), the primary reason for the existence of Tri.
 
 The name Tri relates to the way the declarations are tree structured, as well as having an intrinsic tripartite structure, tag, container and parameter set.
 
