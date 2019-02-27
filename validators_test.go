@@ -164,14 +164,18 @@ func TestDefaultCommand(t *testing.T) {
 func TestDefaultOn(t *testing.T) {
 
 	// must be empty
+	tdo1 := DefaultOn{1}
+	e := tdo1.Validate()
+	if e == nil {
+		t.Error("validator permitted content in DefaultOn")
+	}
 
-	// must not be empty
-
-	// must have pairs of elements
-
-	// elements must be strings
-
-	// even numbered (first in pair) elements have no control characters
+	// is empty
+	tdo2 := DefaultOn{}
+	e = tdo2.Validate()
+	if e != nil {
+		t.Error("validator rejected valid empty DefaultOn")
+	}
 
 }
 

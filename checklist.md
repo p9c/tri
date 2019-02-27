@@ -66,9 +66,10 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] string is a ValidName
       - [x] no error!
 
-   - [ ] `DefaultOn.Validate()`
+   - [x] `DefaultOn.Validate()`
 
-      - [ ] must be empty
+      - [x] must be empty
+      - [x] no error!
 
    - [ ] `Examples.Validate()`
 
