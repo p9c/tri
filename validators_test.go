@@ -31,6 +31,7 @@ func TestCommand(t *testing.T) {
 	//Brief field present
 
 	//Handler present
+
 }
 
 func TestCommands(t *testing.T) {
@@ -40,6 +41,7 @@ func TestCommands(t *testing.T) {
 	// item is string
 
 	// item is a ValidName
+
 }
 
 func TestDefault(t *testing.T) {
@@ -52,6 +54,7 @@ func TestDefaultCommand(t *testing.T) {
 	// element is string
 
 	// string is a ValidName
+
 }
 
 func TestDefaultOn(t *testing.T) {
@@ -65,6 +68,7 @@ func TestDefaultOn(t *testing.T) {
 	// elements must be strings
 
 	// even numbered (first in pair) elements have no control characters
+
 }
 
 func TestExamples(t *testing.T) {
@@ -82,6 +86,7 @@ func TestExamples(t *testing.T) {
 	// element is a string
 
 	// string is a ValidName
+
 }
 
 func TestGroup(t *testing.T) {
@@ -98,6 +103,7 @@ func TestHelp(t *testing.T) {
 	// contains only one element
 
 	// element is a string
+
 }
 
 func TestRunAfter(t *testing.T) {
@@ -111,11 +117,13 @@ func TestShort(t *testing.T) {
 	// contains only one elemennt
 
 	// element is a rune (single character/unicode point)
+
 }
 
 func TestSlot(t *testing.T) {
 
 	// slots are all the same type (pointer to said type)
+
 }
 
 func TestTerminates(t *testing.T) {
@@ -146,6 +154,7 @@ func TestTri(t *testing.T) {
 	// Version is missing
 
 	// Commands is missing
+
 }
 
 func TestTrigger(t *testing.T) {
@@ -161,6 +170,7 @@ func TestTrigger(t *testing.T) {
 	// only one Handler
 
 	// rest of items only (one of) Short, Usage, Help, DefaultOn, Terminates and RunAfter
+
 }
 
 func TestUsage(t *testing.T) {
@@ -172,6 +182,7 @@ func TestUsage(t *testing.T) {
 	// string is no more than 80 chars long
 
 	// string contains no control characters
+
 }
 
 func TestValidName(t *testing.T) {
@@ -187,6 +198,7 @@ func TestValidName(t *testing.T) {
 	// only one handler
 
 	// has one each of Brief and Handler
+
 }
 
 func TestVar(t *testing.T) {
@@ -202,9 +214,11 @@ func TestVar(t *testing.T) {
 	// field 4 is a string
 
 	// string contains only letters and numbers
+
 }
 
 func TestVersion(t *testing.T) {
 
 	//contains only letters
+
 }

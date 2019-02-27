@@ -28,6 +28,8 @@
 
 Each validator has several error conditions, so each of them are elaborated under the validation function's heading.
 
+- [x] Test stubs written
+
    - [ ] `Brief.Validate()`
 
       - [ ] one item only
@@ -145,7 +147,7 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] has at least 3 fields
       - [ ] first three are integers
       - [ ] integers are under 100
-      - [ ] field 4 is a string
+      - [ ] 4th field is a string
       - [ ] string contains only letters and numbers
 
    - [ ] `tri.ValidName()`
