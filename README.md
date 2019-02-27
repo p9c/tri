@@ -48,6 +48,14 @@ Within each subcommand, each configurable parameter has a default, sane value, w
 
 Once Tri finishes validation and gathers and composes all of the values, the configuration variables for the application are fully validated and filled and can immediately then be executed, eliminating a major cause of errors in such code, where values are not properly loaded, loaded into the wrong place, or not effectively exported to the application at all.
 
+## Progress
+
+See the [checklist](checklist.md) for current status.
+
+## Documentation
+
+See [declarations] for a human-readable description of the declaration syntax used in Tri.
+
 ## Motivation
 
 This library was written in order to ease the implementation of multi-command concurrent servers in the root of the repository referred to above about the logger (the parallelcoin pod), which contains a bitcoin-based full node and wallet server, separated for security reasons, but a complete mismatch with our needs, and with the light weight of the chain, the most direct route to a nice GUI.
