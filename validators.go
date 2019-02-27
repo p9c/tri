@@ -282,6 +282,12 @@ func (r *Slot) Validate() error {
 			}
 		}
 	}
+	for _, x := range R {
+		if reflect.ValueOf(x).Kind() != reflect.Ptr {
+			return fmt.Errorf("slot contains non-pointer type")
+		}
+	}
+
 	return nil
 }
 

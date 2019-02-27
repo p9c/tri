@@ -280,8 +280,30 @@ func TestGroup(t *testing.T) {
 func TestHelp(t *testing.T) {
 
 	// contains only one element
+	th1 := Help{1, 1}
+	e := th1.Validate()
+	if e == nil {
+		t.Error("validator accepted more than one")
+	}
+	th2 := Help{}
+	e = th2.Validate()
+	if e == nil {
+		t.Error("validator accepted no elements")
+	}
 
 	// element is a string
+	th3 := Help{1.0}
+	e = th3.Validate()
+	if e == nil {
+		t.Error("validator accepted non-string")
+	}
+
+	// no error!
+	th4 := Help{"this is a test with cr\nand other things"}
+	e = th4.Validate()
+	if e != nil {
+		t.Error("validator rejected valid element")
+	}
 
 }
 
@@ -315,12 +337,46 @@ func TestShort(t *testing.T) {
 func TestSlot(t *testing.T) {
 
 	// slots are all the same type (pointer to said type)
+	a := 1
+	b := "string"
+	ts1 := Slot{&a, &b}
+	e := ts1.Validate()
+	if e == nil {
+		t.Error("validator accepted heteregenous types")
+	}
+
+	// slots are all pointers
+	c := 2
+	ts2 := Slot{a, c}
+	e = ts2.Validate()
+	if e == nil {
+		t.Error("validator accepted heteregenous types")
+	}
+
+	// no error!
+	ts3 := Slot{&a, &c}
+	e = ts3.Validate()
+	if e == nil {
+		t.Error("validator rejected valid contents")
+	}
 
 }
 
 func TestTerminates(t *testing.T) {
+	// must be empty
+	tt1 := Terminates{1}
+	e := tt1.Validate()
+	if e == nil {
+		t.Error("validator permitted content")
+	}
 
-	// contains no elements
+	// is empty
+	tt2 := Terminates{}
+	e = tt2.Validate()
+	if e != nil {
+		t.Error("validator rejected valid empty Terminates")
+	}
+
 }
 
 func TestTri(t *testing.T) {

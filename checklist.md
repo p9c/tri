@@ -88,27 +88,32 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] string is a ValidName
       - [x] no error!
 
-   - [ ] `Help.Validate()`
+   - [x] `Help.Validate()`
 
-      - [ ] contains only one element
-      - [ ] element is a string
+      - [x] contains only one element
+      - [x] element is a string
+      - [x] no error!
 
    - [x] `RunAfter.Validate()`
 
       - [x] may not contain anything
+      - [x] no error!
 
    - [ ] `Short.Validate()`
 
       - [ ] contains only one element
       - [ ] element is a rune (single character/unicode point)
 
-   - [ ] `Slot.Validate()`
+   - [x] `Slot.Validate()`
 
-      - [ ] slots are all the same type (pointer to said type)
+      - [x] slots are all the same type (pointer to said type)
+      - [x] slots are all pointers
+      - [x] no error!
 
-   - [ ] `Terminates.Validate()`
+   - [x] `Terminates.Validate()`
 
-      - [ ] contains no elements
+      - [x] contains no elements
+      - [x] no error!
 
    - [ ] `Tri.Validate()`
 
