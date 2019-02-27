@@ -43,7 +43,7 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] more than one handler not allowed
       - [ ] handler not nil
       - [ ] Brief field present
-      - [ ] Handler presennt
+      - [ ] Handler present
 
    - [ ] `Commands.Validate()`
 
