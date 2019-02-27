@@ -9,7 +9,7 @@ Below is all of the elements within their valid positions (only `name` fields mu
          Brief{""}, *1
          Version{0, 1, 1, "alpha"}, *1
          DefaultCommand{""}, 1
-         Var{"name", 
+         Var{"name", *1
             Short{"d"}, 1
             Brief{"brief"}, *1
             Usage{"usage"}, 1
@@ -17,7 +17,7 @@ Below is all of the elements within their valid positions (only `name` fields mu
             Default{"~/.pod"}, 1
             Slot{""}, 1
          },
-         Trigger{"init", 
+         Trigger{"init", *1
             Short{"I"}, 1
             Brief{"brief"}, *1
             Usage{"usage"}, 1
@@ -30,7 +30,7 @@ Below is all of the elements within their valid positions (only `name` fields mu
             },
          },
          Commands{ 1
-            {"ctl", 
+            {"ctl", *1
                Short{"c"}, 1
                Brief{"brief"}, *1
                Usage{"usage"}, 1
@@ -39,8 +39,8 @@ Below is all of the elements within their valid positions (only `name` fields mu
                Examples{ 1
                   "example 1", "explaining text", (pairs of strings)
                },
-               Var{}, 1
-               Trigger{}, 1
+               Var{...}, 1
+               Trigger{...}, 1
                func(Tri) int { *1
                },
             },
