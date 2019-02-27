@@ -271,7 +271,7 @@ func TestGroup(t *testing.T) {
 	// no error!
 	tg5 := Group{"abc"}
 	e = tg5.Validate()
-	if e == nil {
+	if e != nil {
 		t.Error("validator rejected valid name")
 	}
 
