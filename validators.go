@@ -126,7 +126,11 @@ func (r *Default) Validate() error {
 	if len(R) != 1 {
 		return errors.New("the Default container must only contain one element")
 	}
-	if e := ValidName(R[0].(string)); e != nil {
+	s, ok := R[0].(string)
+	if !ok {
+		return errors.New("Default item not a string")
+	}
+	if e := ValidName(s); e != nil {
 		return fmt.Errorf("error in Default: %v", e)
 	}
 	return nil
@@ -141,11 +145,11 @@ func (r *DefaultCommand) Validate() error {
 		return errors.New(
 			"the DefaultCommand element must contain only one element")
 	}
-	_, ok := R[0].(string)
+	s, ok := R[0].(string)
 	if !ok {
 		return errors.New("element 0 of DefaultCommand must be a string")
 	}
-	if e := ValidName(R[0].(string)); e != nil {
+	if e := ValidName(s); e != nil {
 		return fmt.Errorf("error in DefaultCommand: %v", e)
 	}
 	return nil
