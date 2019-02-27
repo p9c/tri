@@ -1,5 +1,53 @@
 # Taxonomy of a Tri
 
+## Syntax Definition Pseudocode
+
+Below is all of the elements within their valid positions (only `name` fields must have specific position), * indicates mandatory and 1 indicates only one is permitted:
+
+      Tri{
+         "name", *1
+         Brief{""}, *1
+         Version{0, 1, 1, "alpha"}, *1
+         DefaultCommand{""}, 1
+         Var{"name", 
+            Short{"d"}, 1
+            Brief{"brief"}, *1
+            Usage{"usage"}, 1
+            Help{"help"}, 1
+            Default{"~/.pod"}, 1
+            Slot{""}, 1
+         },
+         Trigger{"init", 
+            Short{"I"}, 1
+            Brief{"brief"}, *1
+            Usage{"usage"}, 1
+            Help{"help"}, 1
+            DefaultOn{}, 1
+            Terminates{}, 1
+            RunAfter{}, 1
+            func(Tri) int { *1
+               return 0
+            },
+         },
+         Commands{ 1
+            {"ctl", 
+               Short{"c"}, 1
+               Brief{"brief"}, *1
+               Usage{"usage"}, 1
+               Help{"help"}, 1
+               Group{"groupname"}, 1
+               Examples{ 1
+                  "example 1", "explaining text", (pairs of strings)
+               },
+               Var{}, 1
+               Trigger{}, 1
+               func(Tri) int { *1
+               },
+            },
+         },
+      }
+
+
 ## `name`
 
 List elements of a Tri, being Tri, Command, Var and Trigger all require an initial string name field that may contain only letter characters. Case should be lower but the parser normalises the strings before using the definition.
@@ -83,50 +131,3 @@ Commands is just an array of Command, containing zero or more Command items.
 Tri is the top-level definition for the application, it reqires the `name`, `Brief` and `Version` fields, and optionally a Commands item and zero or more Var and Trigger items.
 
 The `Var` fields define values that are common to all or most of the `Command` fields.
-
-## Syntax Definition Pseudocode
-
-Below is all of the elements within their valid positions (only `name` fields must have specific position), * indicates mandatory and 1 indicates only one is permitted:
-
-      Tri{
-         "name", *1
-         Brief{""}, *1
-         Version{0, 1, 1, "alpha"}, *1
-         DefaultCommand{""}, 1
-         Var{"name", 
-            Short{"d"}, 1
-            Brief{"brief"}, *1
-            Usage{"usage"}, 1
-            Help{"help"}, 1
-            Default{"~/.pod"}, 1
-            Slot{""}, 1
-         },
-         Trigger{"init", 
-            Short{"I"}, 1
-            Brief{"brief"}, *1
-            Usage{"usage"}, 1
-            Help{"help"}, 1
-            DefaultOn{}, 1
-            Terminates{}, 1
-            RunAfter{}, 1
-            func(Tri) int { *1
-               return 0
-            },
-         },
-         Commands{
-            {"ctl", *1
-               Short{"c"}, 1
-               Brief{"brief"}, *1
-               Usage{"usage"}, 1
-               Help{"help"}, 1
-               Group{"groupname"}, 1
-               Examples{ 1
-                  "example 1", "explaining text", (pairs of strings)
-               },
-               Var{}, 1
-               Trigger{}, 1
-               func(Tri) int { *1
-               },
-            },
-         },
-      }

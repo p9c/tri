@@ -1,5 +1,9 @@
 package tri
 
+import (
+	"fmt"
+)
+
 var exampleTri = Tri{
 	"appname",
 	Brief{"brief"},
