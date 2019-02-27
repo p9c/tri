@@ -54,7 +54,7 @@ See the [checklist](checklist.md) for current status.
 
 ## Documentation
 
-See [declarations] for a human-readable description of the declaration syntax used in Tri.
+See [declarations](declarations.md) for a human-readable description of the declaration syntax used in Tri.
 
 ## Motivation
 
