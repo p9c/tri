@@ -492,8 +492,8 @@ func (r *Trigger) Validate() error {
 // Usage fields contain only one string of no more than 80 characters and no control characters.
 func (r *Usage) Validate() error {
 	R := *r
-	if len(R) > 1 {
-		return errors.New("Usage field must contain (only) one string")
+	if len(R) != 1 {
+		return errors.New("Usage field must contain (only) one element")
 	}
 	s, ok := R[0].(string)
 	if !ok {
@@ -633,7 +633,7 @@ func (r *Version) Validate() error {
 // ValidName checks that a Tri name element that should be a name only contains letters.
 func ValidName(s string) error {
 
-	if len(s) > 3 {
+	if len(s) < 3 {
 		return errors.New("name is less than 3 characters long")
 	}
 	for i, x := range s {

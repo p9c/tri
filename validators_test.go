@@ -356,7 +356,7 @@ func TestSlot(t *testing.T) {
 	// no error!
 	ts3 := Slot{&a, &c}
 	e = ts3.Validate()
-	if e == nil {
+	if e != nil {
 		t.Error("validator rejected valid contents")
 	}
 
@@ -424,12 +424,50 @@ func TestTrigger(t *testing.T) {
 func TestUsage(t *testing.T) {
 
 	// only one element
+	tu1 := Usage{}
+	tu2 := Usage{1, 2}
+	e := tu1.Validate()
+	if e == nil {
+		t.Error("validator permitted empty Usage")
+	}
+	e = tu2.Validate()
+	if e == nil {
+		t.Error("validator permitted more than one element in Usage")
+	}
 
 	// element is string
+	tu3 := Usage{0.1}
+	e = tu3.Validate()
+	if e == nil {
+		t.Error("validator permitted element that is not a string")
+	}
 
 	// string is no more than 80 chars long
+	tu4 := Usage{
+		"123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+	}
+	e = tu4.Validate()
+	if e == nil {
+		t.Error("validator permitted over 80 characters")
+	}
 
 	// string contains no control characters
+	tu5 := Usage{
+		"aaa\n",
+	}
+	e = tu5.Validate()
+	if e == nil {
+		t.Error("validator permitted control character in explainer")
+	}
+
+	// no error!
+	tu6 := Usage{
+		"aaaaaaa",
+	}
+	e = tu6.Validate()
+	if e != nil {
+		t.Error("validator rejected valid input")
+	}
 
 }
 
@@ -460,6 +498,23 @@ func TestValidName(t *testing.T) {
 
 func TestVar(t *testing.T) {
 
+	// contains at least 3 elements
+
+	// first is string
+
+	// name is ValidName
+
+	// only one Brief
+
+	// only one handler
+
+	// has one each of Brief and Handler
+
+	// no error!
+}
+
+func TestVersion(t *testing.T) {
+
 	// has no more than 4 fields
 
 	// has at least 3 fields
@@ -468,14 +523,10 @@ func TestVar(t *testing.T) {
 
 	// integers are under 100
 
-	// field 4 is a string
+	// 4th field is a string
 
 	// string contains only letters and numbers
 
-}
-
-func TestVersion(t *testing.T) {
-
-	//contains only letters
+	// no error!
 
 }

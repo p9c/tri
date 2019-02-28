@@ -138,12 +138,13 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] only one Handler
       - [ ] rest of items only (one of) Short, Usage, Help, DefaultOn, Terminates and RunAfter
 
-   - [ ] `Usage.Validate()`
+   - [x] `Usage.Validate()`
 
-      - [ ] only one element
-      - [ ] element is string
-      - [ ] string is no more than 80 chars long
-      - [ ] string contains no control characters
+      - [x] only one element
+      - [x] element is string
+      - [x] string is no more than 80 chars long
+      - [x] string contains no control characters
+      - [x] no error!
 
    - [ ] `Var.Validate()`
 
@@ -153,6 +154,7 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] only one Brief
       - [ ] only one handler
       - [ ] has one each of Brief and Handler
+      - [ ] no error!
 
    - [ ] `Version.Validate()`
 
@@ -162,6 +164,7 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] integers are under 100
       - [ ] 4th field is a string
       - [ ] string contains only letters and numbers
+      - [ ] no error!
 
    - [x] `tri.ValidName()`
 
