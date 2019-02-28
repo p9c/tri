@@ -40,8 +40,8 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [ ] `Command.Validate()`
 
-      - [ ] string in index 0
-      - [ ] string is valid name (letters only)
+      - [x] string in index 0
+      - [x] string is valid name (letters only)
       - [ ] more than one brief not allowed
       - [ ] more than one handler not allowed
       - [ ] handler not nil

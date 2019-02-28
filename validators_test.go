@@ -63,8 +63,18 @@ func TestBrief(t *testing.T) {
 func TestCommand(t *testing.T) {
 
 	//string in index 0
+	tc1 := Command{1}
+	e := tc1.Validate()
+	if e == nil {
+		t.Error("validator accepted non-string name")
+	}
 
 	//string is valid name (letters only)
+	tc2 := Command{"!"}
+	e = tc2.Validate()
+	if e == nil {
+		t.Error("validator accepted invalid name")
+	}
 
 	//more than one brief not allowed
 
