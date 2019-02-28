@@ -516,17 +516,54 @@ func TestVar(t *testing.T) {
 func TestVersion(t *testing.T) {
 
 	// has no more than 4 fields
+	tv1 := Version{1, 2, 3, 4, 5}
+	e := tv1.Validate()
+	if e == nil {
+		t.Error("validator accepted more than three items")
+	}
 
 	// has at least 3 fields
+	tv2 := Version{4, 5}
+	e = tv2.Validate()
+	if e == nil {
+		t.Error("validator accepted less than three items")
+	}
 
 	// first three are integers
+	tv3 := Version{1.1, 2, 3, 4}
+	e = tv3.Validate()
+	if e == nil {
+		t.Error("validator accepted non-integer version numbers")
+	}
 
 	// integers are under 100
+	tv4 := Version{100, 2, 3, 4}
+	e = tv4.Validate()
+	if e == nil {
+		t.Error("validator accepted a version number over 100")
+	}
 
 	// 4th field is a string
+	tv5 := Version{10, 2, 3, 4}
+	e = tv5.Validate()
+	if e == nil {
+		t.Error("validator accepted a 4th field that is not a string")
+	}
 
 	// string contains only letters and numbers
+	tv6 := Version{10, 2, 3, "alpha3! "}
+	e = tv6.Validate()
+	if e == nil {
+		t.Error(
+			"validator accepted a 4th field that contains other than letters and numbers")
+	}
 
 	// no error!
+	tv7 := Version{10, 2, 3, "alpha3"}
+	e = tv7.Validate()
+	if e == nil {
+		t.Error(
+			"validator accepted a 4th field that contains other than letters and numbers")
+	}
 
 }

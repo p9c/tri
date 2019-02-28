@@ -156,15 +156,15 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [ ] has one each of Brief and Handler
       - [ ] no error!
 
-   - [ ] `Version.Validate()`
+   - [x] `Version.Validate()`
 
-      - [ ] has no more than 4 fields
-      - [ ] has at least 3 fields
-      - [ ] first three are integers
-      - [ ] integers are under 100
-      - [ ] 4th field is a string
-      - [ ] string contains only letters and numbers
-      - [ ] no error!
+      - [x] has no more than 4 fields
+      - [x] has at least 3 fields
+      - [x] first three are integers
+      - [x] integers are under 100
+      - [x] 4th field is a string
+      - [x] string contains only letters and numbers
+      - [x] no error!
 
    - [x] `tri.ValidName()`
 

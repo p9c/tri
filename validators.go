@@ -606,7 +606,7 @@ func (r *Version) Validate() error {
 	if len(R) < 3 {
 		return errors.New("Version field must contain at least 3 fields")
 	}
-	for i, x := range R[:4] {
+	for i, x := range R[:3] {
 		n, ok := x.(int)
 		if !ok {
 			return fmt.Errorf("Version field %d is not an integer: %d", i, n)
@@ -615,15 +615,16 @@ func (r *Version) Validate() error {
 			return fmt.Errorf("Version field %d value is over 99: %d", i, n)
 		}
 	}
-	if len(R) == 4 {
+	if len(R) > 3 {
 		s, ok := R[3].(string)
 		if !ok {
 			return fmt.Errorf("optional field 4 of Version is not a string")
-		}
-		for i, x := range s {
-			if !(unicode.IsLetter(x) || unicode.IsDigit(x)) {
-				return fmt.Errorf(
-					"optional field 4 of Version contains other than letters and numbers at position %d: '%v,", i, x)
+		} else {
+			for i, x := range s {
+				if !(unicode.IsLetter(x) || unicode.IsDigit(x)) {
+					return fmt.Errorf(
+						"optional field 4 of Version contains other than letters and numbers at position %d: '%v,", i, x)
+				}
 			}
 		}
 	}
