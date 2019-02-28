@@ -259,9 +259,12 @@ func (r *Short) Validate() error {
 	if len(R) != 1 {
 		return errors.New("Short name item must contain (only) one item")
 	}
-	_, ok := R[0].(rune)
+	s, ok := R[0].(rune)
 	if !ok {
-		return errors.New("Short name element must be a rune (enclose in '')")
+		return errors.New("Short's element must be a rune (enclose in '')")
+	}
+	if !(unicode.IsDigit(s) || unicode.IsLetter(s)) {
+		return errors.New("Short element is not a letter or number")
 	}
 	return nil
 }

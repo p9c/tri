@@ -99,10 +99,12 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] may not contain anything
       - [x] no error!
 
-   - [ ] `Short.Validate()`
+   - [x] `Short.Validate()`
 
-      - [ ] contains only one element
-      - [ ] element is a rune (single character/unicode point)
+      - [x] contains only one element
+      - [x] element is a rune (single character/unicode point)
+      - [x] element is a letter or number
+      - [x] no error!
 
    - [x] `Slot.Validate()`
 

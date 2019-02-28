@@ -328,9 +328,33 @@ func TestRunAfter(t *testing.T) {
 
 func TestShort(t *testing.T) {
 
-	// contains only one elemennt
+	// contains only one element
+	ts1 := Short{'1', 2}
+	e := ts1.Validate()
+	if e == nil {
+		t.Error("validator accepted more than one item")
+	}
 
 	// element is a rune (single character/unicode point)
+	ts2 := Short{1}
+	e = ts2.Validate()
+	if e == nil {
+		t.Error("validator accepted a non-rune element")
+	}
+
+	// element is a letter or number
+	ts3 := Short{'!'}
+	e = ts3.Validate()
+	if e == nil {
+		t.Error("validator accepted non alphanumeric element")
+	}
+
+	// no error!
+	ts4 := Short{'a'}
+	e = ts4.Validate()
+	if e != nil {
+		t.Error("validator rejected a valid short element")
+	}
 
 }
 
@@ -561,7 +585,7 @@ func TestVersion(t *testing.T) {
 	// no error!
 	tv7 := Version{10, 2, 3, "alpha3"}
 	e = tv7.Validate()
-	if e == nil {
+	if e != nil {
 		t.Error(
 			"validator accepted a 4th field that contains other than letters and numbers")
 	}
