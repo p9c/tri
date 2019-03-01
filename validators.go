@@ -45,7 +45,7 @@ func (r *Command) Validate() error {
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [2]bool
 	brief, handler := 0, 1
-	var singleSet [3]bool
+	var singleSet [4]bool
 	usage, short, help, examples := 0, 1, 2, 3
 	for i, x := range R[1:] {
 		switch c := x.(type) {
@@ -545,7 +545,7 @@ func (r *Var) Validate() error {
 	R := *r
 	if len(R) < 3 {
 		return errors.New(
-			"Trigger must contain a name, Brief and Handler at minimum")
+			"Var must contain a name, Brief and Handler at minimum")
 	}
 	name, ok := R[0].(string)
 	if !ok {

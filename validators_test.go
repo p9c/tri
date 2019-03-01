@@ -61,62 +61,122 @@ func TestBrief(t *testing.T) {
 }
 
 func TestCommand(t *testing.T) {
-
 	//string in index 0
 	tc1 := Command{1}
-	e := tc1.Validate()
-	if e == nil {
+	if e := tc1.Validate(); e == nil {
 		t.Error("validator accepted non-string name")
 	}
-
 	//string is valid name (letters only)
 	tc2 := Command{"!"}
-	e = tc2.Validate()
-	if e == nil {
+	if e := tc2.Validate(); e == nil {
 		t.Error("validator accepted invalid name")
 	}
-
 	//more than one brief not allowed
 	tc3 := Command{"name", Brief{""}, Brief{""}}
-	e = tc3.Validate()
-	if e == nil {
+	if e := tc3.Validate(); e == nil {
 		t.Error("validator accepted more than one Brief")
 	}
-
+	// brief is invalid
+	tc4 := Command{"name", Brief{}}
+	if e := tc4.Validate(); e == nil {
+		t.Error("validator accepted invalid Brief")
+	}
 	//more than one handler not allowed
-	tc4 := Command{"name", Brief{""},
-		func(Tri) int { return 0 }, func(Tri) int { return 0 }}
-	e = tc4.Validate()
-	if e == nil {
+	tc5 := Command{"name", Brief{""}, func(Tri) int { return 0 }, func(Tri) int { return 0 }}
+	if e := tc5.Validate(); e == nil {
 		t.Error("validator accepted more than one handler")
 	}
-
 	//handler not nil
 	isnil := func(Tri) int { return 1 }
 	_ = isnil
 	isnil = nil
-	tc5 := Command{"name", isnil}
-	e = tc5.Validate()
-	if e == nil {
+	tc6 := Command{"name", isnil}
+	if e := tc6.Validate(); e == nil {
 		t.Error("validator accepted nil handler")
 	}
-
-	// no more than one Usage
-
 	// no more than one Short
-
+	tc7 := Command{"name", Short{'a'}, Short{'b'}}
+	if e := tc7.Validate(); e == nil {
+		t.Error("validator accepted more than one Short")
+	}
+	// invalid Short
+	tc8 := Command{"name", Short{}}
+	if e := tc8.Validate(); e == nil {
+		t.Error("validator accepted invalid Short")
+	}
+	// no more than one Usage
+	tc9 := Command{"name", Usage{""}, Usage{""}}
+	if e := tc9.Validate(); e == nil {
+		t.Error("validator accepted more than one Short")
+	}
+	// invalid Usage
+	tc10 := Command{"name", Usage{}}
+	if e := tc10.Validate(); e == nil {
+		t.Error("validator invalid Usage")
+	}
 	// no more than one Help
-
+	tc11 := Command{"name", Help{""}, Help{""}}
+	if e := tc11.Validate(); e == nil {
+		t.Error("validator accepted more than one Short")
+	}
+	// invalid Help
+	tc12 := Command{"name", Help{}}
+	if e := tc12.Validate(); e == nil {
+		t.Error("validator invalid Usage")
+	}
 	// no more than one Examples
-
+	tc13 := Command{"name", Examples{"", ""}, Examples{"", ""}}
+	if e := tc13.Validate(); e == nil {
+		t.Error("validator accepted more than one Short")
+	}
+	// invalid Examples
+	tc14 := Command{"name", Examples{}}
+	if e := tc14.Validate(); e == nil {
+		t.Error("validator invalid Usage")
+	}
+	//invalid Var
+	tc15 := Command{"name", Var{}}
+	if e := tc15.Validate(); e == nil {
+		t.Error("validator accepted invalid Var")
+	}
+	//invalid Trigger
+	tc16 := Command{"name", Trigger{}}
+	if e := tc16.Validate(); e == nil {
+		t.Error("validator accepted invalid Trigger")
+	}
 	//Brief field present
-
+	tc17 := Command{"name", func(Tri) int { return 1 }}
+	if e := tc17.Validate(); e == nil {
+		t.Error("validator accepted Command without a Brief")
+	}
 	//Handler present
-
+	tc18 := Command{"name", Brief{""}}
+	if e := tc18.Validate(); e == nil {
+		t.Error("validator accepted Command without a handler")
+	}
+	//invalid typed element
+	tc19 := Command{"name", Brief{""}, func(Tri) int { return 1 }, 1}
+	if e := tc19.Validate(); e == nil {
+		t.Error("validator accepted Command without a Brief")
+	}
+	// no errors!
+	tc20 := Command{"name", Brief{""}, func(Tri) int { return 1 }}
+	if e := tc20.Validate(); e != nil {
+		t.Error("validator rejected valid Command")
+	}
 }
 
 func TestCommands(t *testing.T) {
-
+	tcc1 := Commands{
+		Command{"name", Brief{""}, func(Tri) int { return 1 }, 1},
+	}
+	if e := tcc1.Validate(); e == nil {
+		t.Error("validator accepted Commands with invalid element")
+	}
+	tcc2 := Commands{Command{"name", Brief{""}, func(Tri) int { return 1 }}}
+	if e := tcc2.Validate(); e != nil {
+		t.Error("validator rejected valid Commands")
+	}
 }
 
 func TestDefault(t *testing.T) {

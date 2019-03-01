@@ -43,14 +43,23 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] string in index 0
       - [x] string is valid name (letters only)
       - [x] more than one brief not allowed
+      - [x] brief is invalid
       - [x] more than one handler not allowed
       - [x] handler not nil
-      - [ ] no more than one Usage
-      - [ ] no more than one Short
-      - [ ] no more than one Help
-      - [ ] no more than one Examples
-      - [ ] Brief field present
-      - [ ] Handler present
+      - [x] no more than one Short
+      - [x] invalid Short
+      - [x] no more than one Usage
+      - [x] invalid Usage
+      - [x] no more than one Help
+      - [x] invalid Help
+      - [x] no more than one Examples
+      - [x] invalid Examples
+      - [x] invalid Var
+      - [x] invalid Trigger
+      - [x] Brief field present
+      - [x] Handler present
+      - [x] invalid typed element
+      - [x] no errors!
 
    - [ ] `Commands.Validate()`
 
