@@ -77,10 +77,37 @@ func TestCommand(t *testing.T) {
 	}
 
 	//more than one brief not allowed
+	tc3 := Command{"name", Brief{""}, Brief{""}}
+	e = tc3.Validate()
+	if e == nil {
+		t.Error("validator accepted more than one Brief")
+	}
 
 	//more than one handler not allowed
+	tc4 := Command{"name", Brief{""},
+		func(Tri) int { return 0 }, func(Tri) int { return 0 }}
+	e = tc4.Validate()
+	if e == nil {
+		t.Error("validator accepted more than one handler")
+	}
 
 	//handler not nil
+	isnil := func(Tri) int { return 1 }
+	_ = isnil
+	isnil = nil
+	tc5 := Command{"name", isnil}
+	e = tc5.Validate()
+	if e == nil {
+		t.Error("validator accepted nil handler")
+	}
+
+	// no more than one Usage
+
+	// no more than one Short
+
+	// no more than one Help
+
+	// no more than one Examples
 
 	//Brief field present
 

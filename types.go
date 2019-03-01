@@ -81,9 +81,6 @@ type Examples Tri
 // Group is a single string tag with the same format as name fields that functions as a tag to gather related items in the help output.
 type Group Tri
 
-// Handler is the function signature of a subcommand, and is modeled after the parameterisation of a CLI command. The return value is passed through by the real main function of che handler back to the commandline as a return value. Zero indicates success, nonzero is error, with the possibility of arbitrary attribution of meaning to the number, and is returned to the shell application that launches the command.
-type Handler func(Tri) int
-
 // Help is a free-form text that is interpreted as markdown syntax and may optionally be formatted using ANSI codes by a preprocessor to represent the structured text that a markdown parser will produce, by default all markdown annotations will be removed.
 type Help Tri
 

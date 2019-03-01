@@ -42,9 +42,13 @@ Each validator has several error conditions, so each of them are elaborated unde
 
       - [x] string in index 0
       - [x] string is valid name (letters only)
-      - [ ] more than one brief not allowed
-      - [ ] more than one handler not allowed
-      - [ ] handler not nil
+      - [x] more than one brief not allowed
+      - [x] more than one handler not allowed
+      - [x] handler not nil
+      - [ ] no more than one Usage
+      - [ ] no more than one Short
+      - [ ] no more than one Help
+      - [ ] no more than one Examples
       - [ ] Brief field present
       - [ ] Handler present
 

@@ -45,9 +45,16 @@ func (r *Command) Validate() error {
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [2]bool
 	brief, handler := 0, 1
+	var singleSet [3]bool
+	usage, short, help, examples := 0, 1, 2, 3
 	for i, x := range R[1:] {
 		switch c := x.(type) {
 		case Short:
+			if singleSet[short] {
+				return fmt.Errorf("only one Short field allowed in Command")
+			}
+			singleSet[short] = true
+
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
@@ -56,21 +63,36 @@ func (r *Command) Validate() error {
 			if validSet[brief] {
 				return fmt.Errorf("only one Brief permitted in a Command, second found at index %d", i)
 			}
+			validSet[brief] = true
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 		case Usage:
+			if singleSet[usage] {
+				return fmt.Errorf("only one Usage field allowed in Command")
+			}
+			singleSet[usage] = true
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 		case Help:
+			if singleSet[help] {
+				return fmt.Errorf("only one Help field allowed in Command")
+			}
+			singleSet[help] = true
+
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
 		case Examples:
+			if singleSet[examples] {
+				return fmt.Errorf("only one Examples field allowed in Command")
+			}
+			singleSet[examples] = true
+
 			e := c.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
@@ -85,14 +107,16 @@ func (r *Command) Validate() error {
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
-		case Handler:
+		case func(Tri) int:
 			if validSet[handler] {
 				return fmt.Errorf("only one Handler permitted in a Command, second found at index %d", i)
 			}
+			validSet[handler] = true
 			if c == nil {
 				return fmt.Errorf("nil handler in Command found at index %d", i)
 			}
 		default:
+			return fmt.Errorf("invalid type present in Command: %v", reflect.TypeOf(c))
 		}
 	}
 	if !validSet[brief] {
@@ -433,7 +457,7 @@ func (r *Trigger) Validate() error {
 				validSet[brief] = true
 			}
 
-		case Handler:
+		case func(Tri) int:
 			if y == nil {
 				return fmt.Errorf("Handler at index %d may not be nil", i)
 			}
