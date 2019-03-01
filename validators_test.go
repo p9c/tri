@@ -618,20 +618,101 @@ func TestValidName(t *testing.T) {
 }
 
 func TestVar(t *testing.T) {
-
 	// contains at least 3 elements
-
+	tv1 := Var{1, 1}
+	if e := tv1.Validate(); e == nil {
+		t.Error("Var must contain at least 3 elements")
+	}
 	// first is string
-
+	tv2 := Var{1, 1, 1}
+	if e := tv2.Validate(); e == nil {
+		t.Error("first element must be a string")
+	}
 	// name is ValidName
+	tv3 := Var{"a ", 1, 1}
+	if e := tv3.Validate(); e == nil {
+		t.Error("validator accepted invalid name")
+	}
+	// has only one Brief
+	tv4 := Var{"aaaa", Brief{""}, Brief{""}}
+	if e := tv4.Validate(); e == nil {
+		t.Error("validator accepted more than one Brief")
+	}
+	// has only one Short
+	tv5 := Var{"aaaa", Short{'a'}, Short{'a'}}
+	if e := tv5.Validate(); e == nil {
+		t.Error("validator allowed more than one Short")
+	}
+	// has only one Usage
+	tv6 := Var{"aaaa", Usage{""}, Usage{""}}
+	if e := tv6.Validate(); e == nil {
+		t.Error("validator allowed more than one Usage")
+	}
+	// has only one Help
+	tv7 := Var{"aaaa", Help{""}, Help{""}}
+	if e := tv7.Validate(); e == nil {
+		t.Error("validator allowed more than one Help")
+	}
+	// has only one Default
+	tv8 := Var{"aaaa", Default{"aaa"}, Default{"aaa"}}
+	if e := tv8.Validate(); e == nil {
+		t.Error("validator allowed more than one Default")
+	}
+	// has only one Slot
+	tstring := "valid string"
+	tv9 := Var{"aaaa", Slot{&tstring}, Slot{&tstring}}
+	if e := tv9.Validate(); e == nil {
+		t.Error("validator allowed more than one Slot")
+	}
+	// has invalid Brief
+	tv10 := Var{"aaaa", Brief{}, Short{""}}
+	if e := tv10.Validate(); e == nil {
+		t.Error("validator accepted invalid Brief")
+	}
+	// has invalid Short
+	tv11 := Var{"aaaa", Brief{"aaaa"}, Short{1}}
+	if e := tv11.Validate(); e == nil {
+		t.Error("validator allowed invalid Short")
+	}
+	// has invalid Usage
+	tv12 := Var{"aaaa", Brief{"aaaa"}, Usage{0.1}}
+	if e := tv12.Validate(); e == nil {
+		t.Error("validator allowed invalid Usage")
+	}
+	// has invalid Help
+	tv13 := Var{"aaaa", Brief{""}, Help{"aaa", 1}}
+	if e := tv13.Validate(); e == nil {
+		t.Error("validator allowed invalid Help")
+	}
+	// has invalid Default
+	tv14 := Var{"aaaa", Brief{"aaa"}, Default{1, 3}}
+	if e := tv14.Validate(); e == nil {
+		t.Error("validator allowed invalid Default")
+	}
+	// has invalid Slot
+	tv15 := Var{"aaaa", Brief{tstring}, Slot{tstring}}
+	if e := tv15.Validate(); e == nil {
+		t.Error("validator allowed invalid Slot")
+	}
+	// has one each of Brief and Slot
+	tv16 := Var{"aaaa", Brief{"aaa"}, Default{"aa"}}
+	t.Log(tv16.Validate())
+	if e := tv16.Validate(); e == nil {
+		t.Error("validator allowed absence of Brief or Slot")
+	}
 
-	// only one Brief
+	// has no other type than those foregoing
+	tv17 := Var{"aaaa", Brief{tstring}, Slot{&tstring}, 1}
+	if e := tv17.Validate(); e == nil {
+		t.Error("validator rejected valid Var")
+	}
 
-	// only one handler
+	// no error!}
+	tv18 := Var{"aaaa", Brief{tstring}, Slot{&tstring}}
+	if e := tv18.Validate(); e == nil {
+		t.Error("validator rejected valid Var")
+	}
 
-	// has one each of Brief and Handler
-
-	// no error!
 }
 
 func TestVersion(t *testing.T) {

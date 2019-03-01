@@ -61,9 +61,9 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] invalid typed element
       - [x] no errors!
 
-   - [ ] `Commands.Validate()`
+   - [x] `Commands.Validate()`
 
-      This array alias has no errors of its own
+      This array alias has no errors of its own, Go enforces that its contents are typed correctly.
 
    - [x] `Default.Validate()`
 
@@ -161,15 +161,26 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] string contains no control characters
       - [x] no error!
 
-   - [ ] `Var.Validate()`
+   - [x] `Var.Validate()`
 
-      - [ ] contains at least 3 elements
-      - [ ] first is string
-      - [ ] name is ValidName
-      - [ ] only one Brief
-      - [ ] only one handler
-      - [ ] has one each of Brief and Handler
-      - [ ] no error!
+      - [x] contains at least 3 elements
+      - [x] first is string
+      - [x] name is ValidName
+      - [x] has only one Brief
+      - [x] has only one Short
+      - [x] has only one Usage
+      - [x] has only one Help
+      - [x] has only one Default
+      - [x] has only one Slot
+      - [x] has invalid Brief
+      - [x] has invalid Short
+      - [x] has invalid Usage
+      - [x] has invalid Help
+      - [x] has invalid Default
+      - [x] has invalid Slot
+      - [x] has one each of Brief and Slot
+      - [x] has no other type than those foregoing
+      - [x] no error!
 
    - [x] `Version.Validate()`
 

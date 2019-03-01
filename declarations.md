@@ -16,7 +16,7 @@ Below is all of the elements within their valid positions (only `name` fields mu
             Usage{"usage"}, 1
             Help{"help"}, 1
             Default{"~/.pod"}, 1
-            Slot{""}, 1
+            Slot{""}, *1
          },
          Trigger{
             "init", *1

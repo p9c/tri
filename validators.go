@@ -150,13 +150,6 @@ func (r *Default) Validate() error {
 	if len(R) != 1 {
 		return errors.New("the Default container must only contain one element")
 	}
-	s, ok := R[0].(string)
-	if !ok {
-		return errors.New("Default item not a string")
-	}
-	if e := ValidName(s); e != nil {
-		return fmt.Errorf("error in Default: %v", e)
-	}
 	return nil
 }
 
@@ -545,79 +538,92 @@ func (r *Var) Validate() error {
 	R := *r
 	if len(R) < 3 {
 		return errors.New(
-			"Var must contain a name, Brief and Handler at minimum")
+			"Var must contain a name, Brief and Slot at minimum")
 	}
 	name, ok := R[0].(string)
 	if !ok {
-		return errors.New("first element of Trigger must be the name")
+		return errors.New("first element of Var must be the name")
 	} else if e := ValidName(name); e != nil {
-		return fmt.Errorf("Invalid Name in Trigger at index 0: %v", e)
+		return fmt.Errorf("Invalid Name in Var at index 0: %v", e)
 	}
 	// validSet is an array that represent the presence of the mandatory parts.
 	var validSet [2]bool
-	brief, handler := 0, 1
-	var def, slot bool
-	// check for presence of all mandatory and non-presence of impermissible element types.
+	brief, slot := 0, 1
+	// singleSet is an array representing the optional elements that may not be more than one inside a Var
+	var singleSet [4]bool
+	short, usage, help, def := 0, 1, 2, 3
 	for i, x := range R[1:] {
 
 		switch y := x.(type) {
 
 		case Brief:
-			if e := y.Validate(); e != nil {
-				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
-			}
 			if validSet[brief] {
-				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
+				return fmt.Errorf("Var may must (only) contain one Brief, second found at index %d", i)
 			} else {
 				validSet[brief] = true
 			}
-
-		case Short:
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d :%s", i, e)
+			}
+
+		case Short:
+			if singleSet[short] {
+				return fmt.Errorf("Var may only contain one Short, extra found at index %d", i)
+			}
+			singleSet[short] = true
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Var contains invalid element at %d :%s", i, e)
 			}
 
 		case Usage:
+			if singleSet[usage] {
+				return fmt.Errorf("Var may only contain one Usage, extra found at index %d", i)
+			}
+			singleSet[usage] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d :%s", i, e)
 			}
 
 		case Help:
+			if singleSet[help] {
+				return fmt.Errorf("Var may only contain one Help, extra found at index %d", i)
+			}
+			singleSet[help] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d :%s", i, e)
 			}
 
 		case Default:
-			if def {
-				return fmt.Errorf("Trigger may only contain one Default, extra found at index %d", i)
+			if singleSet[def] {
+				return fmt.Errorf("Var may only contain one Default, extra found at index %d", i)
 			}
-			def = true
+			singleSet[def] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d :%s", i, e)
 			}
 
 		case Slot:
-			if slot {
-				return fmt.Errorf("Trigger may only contain one Default, extra found at index %d", i)
+			if validSet[slot] {
+				return fmt.Errorf("Var may only contain one Slot, extra found at index %d", i)
 			}
-			slot = true
+			validSet[slot] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d :%s", i, e)
 			}
 
 		default:
 			return fmt.Errorf(
-				"found invalid item type at element %d in a Trigger", i)
+				"found invalid item type at element %d in a Var", i)
 		}
 	}
-	if !(validSet[brief] && validSet[handler]) {
-		return errors.New("Trigger must contain one each of Brief and Handler")
+	if !(validSet[brief] && validSet[slot]) {
+		return errors.New("Var must contain one each of Brief and Slot")
 	}
 	return nil
 }
