@@ -65,6 +65,11 @@ func TestBrief(t *testing.T) {
 }
 
 func TestCommand(t *testing.T) {
+	// not empty
+	tc0 := Command{}
+	if e := tc0.Validate(); e == nil {
+		t.Error("validator accepted empty Command")
+	}
 	//string in index 0
 	tc1 := Command{1}
 	if e := tc1.Validate(); e == nil {
@@ -199,8 +204,6 @@ func TestDefault(t *testing.T) {
 	if e != nil {
 		t.Error("validator rejected valid Default")
 	}
-
-	
 
 }
 
@@ -486,28 +489,118 @@ func TestTerminates(t *testing.T) {
 }
 
 func TestTri(t *testing.T) {
-
-	// contains at least 4 elements
-
+	// contains at least 3 elements
+	ttr1 := Tri{1, 1}
+	if e := ttr1.Validate(); e == nil {
+		t.Error("Trigger must contain at least 3 elements")
+	}
 	// first element is a string
-
+	ttr2 := Tri{1, 1, 1}
+	if e := ttr2.Validate(); e == nil {
+		t.Error("first element must be a string")
+	}
 	// string is a ValidName
-
+	ttr3 := Tri{"a ", 1, 1}
+	if e := ttr3.Validate(); e == nil {
+		t.Error("validator accepted invalid name")
+	}
 	// contains (only) one Brief
-
+	ttr4 := Tri{"aaaa", Brief{""}, Brief{""}}
+	if e := ttr4.Validate(); e == nil {
+		t.Error("validator accepted more than one Brief")
+	}
 	// contains (only) one Version
-
+	ttr5 := Tri{"aaaa", Version{1,1,1}, Version{1,1,1}, Brief{"aaaa"}}
+	if e := ttr5.Validate(); e == nil {
+		t.Error("validator accepted more than one Version")
+	}
 	// contains (only) one Commands
-
+	ttr6 := Tri{"aaaa", Commands{}, Commands{}, Brief{"aaaa"}}
+	if e := ttr6.Validate(); e == nil {
+		t.Error("validator accepted more than one Commands")
+	}
 	// contains no more than one DefaultCommand
-
+	ttr7 := Tri{"aaaa", DefaultCommand{"commname"}, DefaultCommand{"commname"}, Brief{"aaaa"}, Commands{Command{"commname"}}}
+	if e := ttr7.Validate(); e == nil {
+		t.Error("validator accepted more than one DefaultCommand")
+	}
+	// DefaultCommand with no Commands array
+	ttr8 := Tri{"aaaa", DefaultCommand{"aaaa"}, Brief{"aaaa"} }
+	if e := ttr8.Validate(); e == nil {
+		t.Error("validator accepted DefaultCommand with no Commands present")
+	}
+	// DefaultCommand's name appears in also present Commands array
+	ttr9 := Tri{"aaaa", DefaultCommand{"commname"}, Brief{"aaaa"}, Commands{Command{"NOTcommname"}}}
+	if e := ttr9.Validate(); e == nil {
+		t.Error("validator accepted more than one DefaultCommand")
+	}
+	// contains invalid Var
+	ttr10 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Var{}}
+	if e := ttr10.Validate(); e == nil {
+		t.Error("validator accepted invalid Var")
+	}
+	// contains invalid Trigger
+	ttr11 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Trigger{}}
+	if e := ttr11.Validate(); e == nil {
+		t.Error("validator accepted invalid Trigger")
+	}
+	// contains invalid DefaultCommand
+	ttr12 := Tri{"aaaa", Version{1,1,1}, DefaultCommand{}, Brief{"aaaa"}, Commands{Command{"commname"}}}
+	if e := ttr12.Validate(); e == nil {
+		t.Error("validator accepted invalid DefaultCommand")
+	}
+	// contains invalid Command in Commands
+	ttr13 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Commands{Command{}}}
+	if e := ttr13.Validate(); e == nil {
+		t.Error("validator accepted invalid Command element in Commands")
+	}
 	// only contains element from set of possible elements
-
+	ttr14 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"},1}
+	if e := ttr14.Validate(); e == nil {
+		t.Error("validator accepted invalid element in Tri")
+	}
+	// contains invalid Brief
+	ttr15 := Tri{"aaaa", Version{1,1,1}, Brief{1}}
+	if e := ttr15.Validate(); e == nil {
+		t.Error("validator accepted invalid Brief")
+	}
+	// contains invalid Version
+	ttr16 := Tri{"aaaa", Version{1,1,1,1}, Brief{"valid brief"}}
+	if e := ttr16.Validate(); e == nil {
+		t.Error("validator accepted invalid Version")
+	}
 	// Brief is missing
-
+	ttr17 := Tri{"aaaa", DefaultCommand{"commname"}, Version{1,1,1}, Commands{Command{"commname",	Brief{"valid brief"},MakeHandler()}}}
+	if e := ttr17.Validate(); e == nil {
+		t.Error("validator accepted missing Brief")
+	}
 	// Version is missing
-
-	// Commands is missing
+	ttr18 := Tri{"aaaa", DefaultCommand{"commname"}, Brief{"valid brief"},
+		Commands{
+			Command{
+				"commname",
+				Brief{"valid brief"},
+				MakeHandler(),
+			},
+		},
+	}
+	if e := ttr18.Validate(); e == nil {
+		t.Error("validator accepted missing Version")
+	}
+	// no error!
+	ttr19 := Tri{"aaaa", DefaultCommand{"commname"}, Brief{"valid brief"},
+		Commands{
+			Command{
+				"commname",
+				Brief{"valid brief"},
+				MakeHandler(),
+			},
+		},
+		Version{1,1,1},
+	}
+	if e := ttr19.Validate(); e != nil {
+		t.Error("validator rejected valid Tri")
+	}
 
 }
 

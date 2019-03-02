@@ -38,8 +38,9 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] no control characters
       - [x] no error!
 
-   - [ ] `Command.Validate()`
+   - [x] `Command.Validate()`
 
+      - [x] not empty
       - [x] string in index 0
       - [x] string is valid name (letters only)
       - [x] more than one brief not allowed
@@ -63,7 +64,7 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [x] `Commands.Validate()`
 
-      This array alias has no errors of its own, Go enforces that its contents are typed correctly.
+     - [x] Command elements are all valid
 
    - [x] `Default.Validate()`
 
@@ -130,17 +131,25 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [ ] `Tri.Validate()`
 
-      - [ ] contains at least 4 elements
-      - [ ] first element is a string
-      - [ ] string is a ValidName
-      - [ ] contains (only) one Brief
-      - [ ] contains (only) one Version
-      - [ ] contains (only) one Commands
-      - [ ] contains no more than one DefaultCommand
-      - [ ] only contains element from set of possible elements
-      - [ ] Brief is missing
-      - [ ] Version is missing
-      - [ ] Commands is missing
+      - [x] contains at least 3 elements
+      - [x] first element is a string
+      - [x] string is a ValidName
+      - [x] contains no more than one Brief
+      - [x] contains no more than one Version
+      - [x] contains no more than one Commands
+      - [x] contains no more than one DefaultCommand
+      - [x] DefaultCommand with no Commands array
+      - [x] DefaultCommand's name appears in also present Commands array
+      - [x] contains invalid Var
+      - [x] contains invalid Trigger
+      - [x] contains invalid DefaultCommand
+      - [x] contains invalid Command in Commands
+      - [x] only contains element from set of possible elements
+      - [x] contains invalid Brief
+      - [x] contains invalid Version
+      - [x] Brief is missing
+      - [x] Version is missing
+      - [x] no error!
 
    - [ ] `Trigger.Validate()`
 

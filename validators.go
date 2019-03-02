@@ -35,6 +35,9 @@ func (r *Brief) Validate() error {
 func (r *Command) Validate() error {
 
 	R := *r
+	if len(R)<1 {
+		return errors.New("empty Command")
+	}
 	s, ok := R[0].(string)
 	if !ok {
 		return fmt.Errorf("first element of Command must be a string")
@@ -326,23 +329,27 @@ func (r *Terminates) Validate() error {
 // A Tri, the base type, in a declaration must contain a name as first element, a Brief, Version and a Commands item, and only one of each. Also, this and several other subtypes of Tri.
 func (r *Tri) Validate() error {
 	R := *r
-	if len(R) < 4 {
-		return errors.New("a Tri must contain at least 4 elements: name, Brief, Version and Commands")
+	if len(R) < 3 {
+		return errors.New("a Tri must contain at least 3 elements: name, Brief and Version")
 	}
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
-	var validSet [4]bool
-	brief, version, commands := 1, 2, 3
-	var def bool
+	var validSet [2]bool
+	brief, version := 0, 1
+	var singleSet [2]bool
+	defcom, commands := 0, 1
 	n, ok := R[0].(string)
 	if !ok {
-		return errors.New("first element of a Tri must be the application name")
+		return errors.New("first element of a Tri must be a string")
 	}
 	if e := ValidName(n); e != nil {
-		return fmt.Errorf("error in name of Command: %v", e)
+		return fmt.Errorf("error in name of Tri: %v", e)
 	}
 
 	// The mandatory elements also may not be repeated:
-	for i, x := range R[1:] {
+	for i, x := range R {
+		if i == 0 {
+			continue
+		}
 		switch y := x.(type) {
 		case Brief:
 			if validSet[brief] {
@@ -354,25 +361,25 @@ func (r *Tri) Validate() error {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 		case Version:
-			if validSet[brief] {
+			if validSet[version] {
 				return fmt.Errorf(
 					"Tri contains more than one Version, second found at index %d", i)
 			}
+			validSet[version]=true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
 			validSet[version] = true
 		case Commands:
-			if validSet[commands] {
+			if singleSet[commands] {
 				return fmt.Errorf(
 					"Tri contains more than one Commands, second found at index %d", i)
 			}
-			validSet[commands] = true
+			singleSet[commands] = true
 			e := y.Validate()
 			if e != nil {
 				return fmt.Errorf("error in Tri field %d: %s", i, e)
 			}
-			// (mostly) Empty conditions only to filter out element types that are not valid in a Tri (default case will trigger for any type not in the set)
 		case Var:
 			e := y.Validate()
 			if e != nil {
@@ -383,20 +390,39 @@ func (r *Tri) Validate() error {
 			if e != nil {
 				return fmt.Errorf("error in Tri at index %d: %v", i, e)
 			}
-		case Usage:
-			e := y.Validate()
-			if e != nil {
-				return fmt.Errorf("Tri field %d: %s", i, e)
-			}
+			
 		case DefaultCommand:
-			if def {
-				return fmt.Errorf("extra DefaultCommand found at index %d", i)
-			}
-			def = true
-			e := y.Validate()
-			if e != nil {
-				return fmt.Errorf("Tri field %d: %s", i, e)
-			}
+			if singleSet[defcom] {
+				return fmt.Errorf(
+					"Tri contains more than one DefaultCommand, second found at index %d", i)
+				}
+				singleSet[defcom] = true
+				e := y.Validate()
+				if e != nil {
+					return fmt.Errorf("Tri field %d: %s", i, e)
+				}
+				commname := y[0].(string)
+				// DefaultCommand must match in its name one of the Command items in also present Commands array
+				foundComm := false
+				foundDefComm := false
+				for _, a := range R {
+					switch c := a.(type) {
+					case Commands:
+						foundComm = true
+						for _, b := range c {
+							if b[0].(string) == commname {
+								foundDefComm = true
+							}
+						}
+					default:
+					}
+				}
+				if !foundComm {
+					return errors.New("DefaultCommand with no Commands array present")
+				} else if !foundDefComm {
+						return errors.New("DefaultCommand found with no matching Command")
+				}
+
 		default:
 			return fmt.Errorf(
 				"Tri contains an element type it may not contain at index %d", i)
@@ -405,13 +431,8 @@ func (r *Tri) Validate() error {
 	switch {
 	case !validSet[brief]:
 		return errors.New("Tri is missing its Brief field")
-
 	case !validSet[version]:
 		return errors.New("Tri is missing its Version field")
-
-	case !validSet[commands]:
-		return errors.New("Tri is missing its Commands field")
-
 	}
 	return nil
 }
