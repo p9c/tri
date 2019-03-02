@@ -8,25 +8,23 @@
 
 3. Runtime splits CLI invocation string by spaces and provides this in os.Args array
 
-4. Runtime first executes Go var declarations, which creates the in-memory form of the declaration
+4. Runtime first executes Go var declarations, which creates the in-memory form of the declaration, as well as all of the built in and custom handlers for their different types and purposes.
 
 5. Validate application's Tri declaration, this should be inside an `init()` or first within the `main()`.
    
    > In this step all of the other-than-zero defaults on Vars will be determined to be correctly specified in as far as presence, and in most cases, type checking. 
-   > 
-   > **TODO: Validators need to type-check between Default and Slot type in Vars.**
    
-   There is no need to create a resultant struct, as the use of Slot elements connects the destination to the source definition, with its defaults (or implied zeroes) specified. The declaration provides paths and types and content elements for default, and is used to point to the final destination for each of the variables.
+   There is no need to create a resultant struct, as the use of Slot elements, which are interface{} containing pointer to (optionally multiple) other variables connects the destination to the source definition, with its defaults (or implied zeroes) specified. The declaration provides paths and types and content elements for default, and is used to point to the final destination for each of the variables.
 
-6. Read JSON configuration file, that should contain persistent values for Var and Trigger items.
+6. Based on CLI arg specified data directory, or from the default location, JSON configuration file is read and parsed.
 
-7. Configuration loader then places overridden values into their respective Slot, after checking type is correct.
+7. Configuration loader then places decoded, and validated values into their respective Slot, after checking type is correct, which is performed by the handlers specified in Vars.
 
 8. Parse os.Args one by one until a valid trigger or variable definition is found, then the name is sought within the Tri, and if found, value is parsed to expected type, and value assigned to dereferenced Slot pointer value. (each of these can error and halt execution)
    
-   As well as those specified in the Tri itself, there is several top-level Var and Trigger types that can also be valid both in config and CLI. Triggers are processed immediately as they are found.
+   As well as those specified in the Tri itself, there is several top-level Var and Trigger types that can also be valid both in config and CLI. Triggers are processed immediately after all configuration/parsing steps are complete, so they have access to the runtime configuration if their functionality requires it.
 
-9. Parsing is now complete, all values are placed implicitly indirectly to their correct destination in this process and non-terminating trigger handlers are run (init, save), and then application main is launched with the composed configuration ready.
+9. Parsing is now complete, all values are placed implicitly indirectly to their correct destination in this process and non-terminating trigger handlers are run (init, save), and then application main is launched with the composed configuration ready, or, terminating triggers are run, and after completion return to the shell where they were invoked.
 
 ## Types for Vars
 
@@ -62,24 +60,32 @@ These are the types that the initial implementation of Tri will target, their in
 
 - time.Duration
 
-   Time has a simple parser for this. A wrapper is needed for it.
+   Time has a simple parser for this. A wrapper is needed for it, and one is implemented in the set of default variable parser handlers that must be present in the Var.
+
+Rather than create an arbitrary set of human readable string type specifications, all of the typing is handled by the Go compiler, through the use of handlers. The handlers determine correct destination type from the Slot, and the default handler is one function with a type switch on the Slot types, in which the input string value attempts to parse, halting if the format of the value is invalid.
+
+If types other than the standard set are needed, the programmer using this library can create their own parsers to enable more types than the default.
 
 ## Built in Variables and Triggers
 
 Any application built with Tri implicitly has a data directory (defaulting to app name inside appdata or a unix dot folder), a configuration file (in JSON format), which only contains values different from default, including DefaultOn triggers that have to be explicitly disabled.
 
-Built-in variables:
+### Built-in variables:
 
-1. DataDir
+1. datadir/D
 
    Defaults to ~/`appname`
 
-Built in Triggers:
+   'appname' in this case refers to the first field of the top level Tri structure. In the case of Windows applications this will be in (usually) `C:\users\username\appdata\appname`. If the specified path does not exist, it will be created. The default handler will cover the case of POSIX/Unix style dot folders and windows appdata folders.
+
+### Built in Triggers:
 
 1. `init`
 
-   Deletes configuration file, then exits. Future runs will then start from defaults
+   Deletes configuration file, then exits. Future runs will then start from defaults. Configuration files only store values that are not default.
 
 3. `save`
    
-   At the end of successful parse of config and CLI args, the new state is persisted into the configuration file. Built-in triggers are the only things that may not be written into the configuration - init is terminating, and save is redundant when no parameters have been specified.
+   At the end of successful parse of config and CLI args, the new state is persisted into the configuration file.
+
+Note that both of these triggers will be overridden if explicitly specified in the declaration, should a specific further effect be required and  these names are desired to be used. They do not have short versions to conserve names for the application's purposes.
