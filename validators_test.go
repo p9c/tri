@@ -90,9 +90,9 @@ func TestCommand(t *testing.T) {
 	if e := tc4.Validate(); e == nil {
 		t.Error("validator accepted invalid Brief")
 	}
-	//more than one MakeHandler() not allowed
-	tc5 := Command{"name", Brief{""}, MakeHandler()}
-	if e := tc5.Validate(); e != nil {
+	//more than one handler not allowed
+	tc5 := Command{"name", Brief{""}, MakeHandler(), MakeHandler()}
+	if e := tc5.Validate(); e == nil {
 		t.Error("validator accepted more than one handler")
 	}
 	// Handler not nil
