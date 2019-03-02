@@ -10,21 +10,19 @@
 
 4. Runtime first executes Go var declarations, which creates the in-memory form of the declaration, as well as all of the built in and custom handlers for their different types and purposes.
 
-5. Validate application's Tri declaration, this should be inside an `init()` or first within the `main()`.
+5. Validate application's Tri declaration.
    
    > In this step all of the other-than-zero defaults on Vars will be determined to be correctly specified in as far as presence, and in most cases, type checking. 
    
    There is no need to create a resultant struct, as the use of Slot elements, which are interface{} containing pointer to (optionally multiple) other variables connects the destination to the source definition, with its defaults (or implied zeroes) specified. The declaration provides paths and types and content elements for default, and is used to point to the final destination for each of the variables.
 
-6. Based on CLI arg specified data directory, or from the default location, JSON configuration file is read and parsed.
+6. Parse os.Args one by one until a valid trigger or variable definition is found, then the name is sought within the Tri, and if found, value is parsed to expected type, and value assigned to dereferenced Slot pointer value. (each of these can error and halt execution)
 
-7. Configuration loader then places decoded, and validated values into their respective Slot, after checking type is correct, which is performed by the handlers specified in Vars.
+7. Based on CLI arg specified data directory found in the previous step, or from the default location, JSON configuration file is read and parsed.
 
-8. Parse os.Args one by one until a valid trigger or variable definition is found, then the name is sought within the Tri, and if found, value is parsed to expected type, and value assigned to dereferenced Slot pointer value. (each of these can error and halt execution)
-   
-   As well as those specified in the Tri itself, there is several top-level Var and Trigger types that can also be valid both in config and CLI. Triggers are processed immediately after all configuration/parsing steps are complete, so they have access to the runtime configuration if their functionality requires it.
+8. Configuration loader then places decoded, and validated values into their respective Slot, after checking type is correct, which is performed by the handlers specified in Vars.
 
-9. Parsing is now complete, all values are placed implicitly indirectly to their correct destination in this process and non-terminating trigger handlers are run (init, save), and then application main is launched with the composed configuration ready, or, terminating triggers are run, and after completion return to the shell where they were invoked.
+9. Built-in triggers take precedence over custom triggers. Init terminates after clearing the configuration file, save rewrites it after parsing and before initiating the Command handler that is specified.
 
 ## Types for Vars
 
@@ -64,7 +62,7 @@ These are the types that the initial implementation of Tri will target, their in
 
 Rather than create an arbitrary set of human readable string type specifications, all of the typing is handled by the Go compiler, through the use of handlers. The handlers determine correct destination type from the Slot, and the default handler is one function with a type switch on the Slot types, in which the input string value attempts to parse, halting if the format of the value is invalid.
 
-If types other than the standard set are needed, the programmer using this library can create their own parsers to enable more types than the default.
+If types other than the standard set are needed, the programmer using this library can create their own var handlers to enable more types than the default set.
 
 ## Built in Variables and Triggers
 
@@ -89,3 +87,5 @@ Any application built with Tri implicitly has a data directory (defaulting to ap
    At the end of successful parse of config and CLI args, the new state is persisted into the configuration file.
 
 Note that both of these triggers will be overridden if explicitly specified in the declaration, should a specific further effect be required and  these names are desired to be used. They do not have short versions to conserve names for the application's purposes.
+
+Also note that logging configuration is not handled by default, nor is there a parser for it. If the application needs these configurations, the handler must be written by the developer to fit the system they are using. I recommend the logger I wrote, found within the Parallelcoin `pod` repository, [located here](https://github.com/parallelcointeam/pod/tree/master/pkg/util/clog).

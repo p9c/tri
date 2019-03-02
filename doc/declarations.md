@@ -109,7 +109,7 @@ There is three types of handlers in Tri: Trigger, Var and Command handlers.
 
    Var handler signature is `func(*Var, interface{}) error`. Var gives access to all of the Var fields relevant to the parsing and validation, it implements the validation that the Default matches the dereferenced type from the slot, the parsing from string to this type, and assigning it to the dereferenced Slot variables, which have already been checked to ensure they are uniform when more than one is present, and then it should load all of them.
 
-   Tri has implementations of the handlers for all of the types you can see described in [overview](overview.md#Types) in the Types section, users of the library who need other types must write their own implementations to the specific types, based on these default builtins.
+   Tri has an implementation in a single function (`ParseVar') of the types you can see described in [overview](overview.md#Types) in the Types section, users of the library who need other types must write their own implementations to the specific types, based on these default builtins. This function is normally called by the CLI parser, for which reason there is the `interface{}` parameter - 
 
 ## `Terminates`
 
