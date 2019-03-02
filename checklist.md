@@ -68,8 +68,6 @@ Each validator has several error conditions, so each of them are elaborated unde
    - [x] `Default.Validate()`
 
       - [x] only one item
-      - [x] item is string
-      - [x] item is a ValidName
       - [x] no error!
 
    - [x] `DefaultCommand.Validate()`
@@ -146,12 +144,28 @@ Each validator has several error conditions, so each of them are elaborated unde
 
    - [ ] `Trigger.Validate()`
 
-      - [ ] must contain name, Brief and Handler
-      - [ ] first element is name
-      - [ ] name is a ValidName
-      - [ ] only one Brief
-      - [ ] only one Handler
-      - [ ] rest of items only (one of) Short, Usage, Help, DefaultOn, Terminates and RunAfter
+      - [x] contains at least 3 elements
+      - [x] first is string
+      - [x] name is ValidName
+      - [x] has only one Brief
+      - [x] has only one Short
+      - [x] has only one Usage
+      - [x] has only one Help
+      - [x] has only one handler
+      - [x] has only one DefaultOn
+      - [x] has only one RunAfter
+      - [x] has only one Terminates
+      - [x] has invalid Brief
+      - [x] has invalid Short
+      - [x] has invalid Usage
+      - [x] has invalid Help
+      - [x] has invalid handler
+      - [x] has invalid DefaultOn
+      - [x] has invalid Terminates
+      - [x] has invalid RunAfter
+      - [x] has one each of Brief and handler
+      - [x] has no other type than those foregoing
+      - [x] no error!
 
    - [x] `Usage.Validate()`
 

@@ -434,64 +434,89 @@ func (r *Trigger) Validate() error {
 	// validSet is an array that represent the presence of the mandatory parts.
 	var validSet [2]bool
 	brief, handler := 0, 1
-	// check for presence of all mandatory and non-presence of impermissible element types.
+	var singleSet [6]bool
+	short, usage, help, defon, terminates, runafter := 0, 1, 2, 3, 4, 5
 	for i, x := range R[1:] {
 
 		switch y := x.(type) {
 
 		case Brief:
+			if validSet[brief] {
+				return fmt.Errorf("Trigger may (only) contain one Brief, second found at index %d", i)
+			} else {
+				validSet[brief] = true
+			}
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
-			if validSet[brief] {
-				return fmt.Errorf("Trigger may must (only) contain one Brief, second found at index %d", i)
-			} else {
-				validSet[brief] = true
-			}
 
 		case func(Tri) int:
-			if y == nil {
-				return fmt.Errorf("Handler at index %d may not be nil", i)
-			}
 			if validSet[handler] {
 				return fmt.Errorf(
-					"Trigger may must (only) contain one Handler, second found at index %d", i)
+					"Trigger may (only) contain one Handler, second found at index %d", i)
 			} else {
 				validSet[handler] = true
 			}
+			if y == nil {
+				return fmt.Errorf("Handler at index %d may not be nil", i)
+			}
 
 		case Short:
+			if singleSet[short] {
+				return fmt.Errorf("Trigger may only contain one Short, extra found at index %d", i)
+			}
+			singleSet[short] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Usage:
+			if singleSet[usage] {
+				return fmt.Errorf("Trigger may only contain one Usage, extra found at index %d", i)
+			}
+			singleSet[usage] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Help:
+			if singleSet[help] {
+				return fmt.Errorf("Trigger may only contain one Help, extra found at index %d", i)
+			}
+			singleSet[help] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case DefaultOn:
+			if singleSet[defon] {
+				return fmt.Errorf("Trigger may only contain one DefaultOn, extra found at index %d", i)
+			}
+			singleSet[defon] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case Terminates:
+			if singleSet[terminates] {
+				return fmt.Errorf("Trigger may only contain one Terminates, extra found at index %d", i)
+			}
+			singleSet[terminates] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
 		case RunAfter:
+			if singleSet[runafter] {
+				return fmt.Errorf("Trigger may only contain one RunAfter, extra found at index %d", i)
+			}
+			singleSet[runafter] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
 					"Trigger contains invalid element at %d :%s", i, e)

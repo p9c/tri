@@ -4,6 +4,10 @@ import (
 	"testing"
 )
 
+func MakeHandler() func(Tri) int {
+	return func(Tri) int { return 0 }
+}
+
 func TestBrief(t *testing.T) {
 
 	// one item only
@@ -81,18 +85,18 @@ func TestCommand(t *testing.T) {
 	if e := tc4.Validate(); e == nil {
 		t.Error("validator accepted invalid Brief")
 	}
-	//more than one handler not allowed
-	tc5 := Command{"name", Brief{""}, func(Tri) int { return 0 }, func(Tri) int { return 0 }}
-	if e := tc5.Validate(); e == nil {
+	//more than one MakeHandler() not allowed
+	tc5 := Command{"name", Brief{""}, MakeHandler()}
+	if e := tc5.Validate(); e != nil {
 		t.Error("validator accepted more than one handler")
 	}
-	//handler not nil
-	isnil := func(Tri) int { return 1 }
+	// Handler not nil
+	isnil := MakeHandler()
 	_ = isnil
 	isnil = nil
 	tc6 := Command{"name", isnil}
 	if e := tc6.Validate(); e == nil {
-		t.Error("validator accepted nil handler")
+		t.Error("validator accepted nil MakeHandler()")
 	}
 	// no more than one Short
 	tc7 := Command{"name", Short{'a'}, Short{'b'}}
@@ -145,35 +149,35 @@ func TestCommand(t *testing.T) {
 		t.Error("validator accepted invalid Trigger")
 	}
 	//Brief field present
-	tc17 := Command{"name", func(Tri) int { return 1 }}
+	tc17 := Command{"name", MakeHandler(), Help{"aaaaa"}}
+	// t.Log(spew.Sdump(tc17), tc17.Validate())
 	if e := tc17.Validate(); e == nil {
 		t.Error("validator accepted Command without a Brief")
 	}
-	//Handler present
-	tc18 := Command{"name", Brief{""}}
+	// handler present
+	tc18 := Command{"name", Brief{""}, Help{"aaaa"}}
 	if e := tc18.Validate(); e == nil {
 		t.Error("validator accepted Command without a handler")
 	}
 	//invalid typed element
-	tc19 := Command{"name", Brief{""}, func(Tri) int { return 1 }, 1}
+	tc19 := Command{"name", Brief{""}, MakeHandler(), 1}
 	if e := tc19.Validate(); e == nil {
-		t.Error("validator accepted Command without a Brief")
+		t.Error("validator accepted Command with a invalid typed eleement")
 	}
 	// no errors!
-	tc20 := Command{"name", Brief{""}, func(Tri) int { return 1 }}
+	tc20 := Command{"name", Brief{""}, MakeHandler()}
 	if e := tc20.Validate(); e != nil {
 		t.Error("validator rejected valid Command")
 	}
 }
 
+
 func TestCommands(t *testing.T) {
-	tcc1 := Commands{
-		Command{"name", Brief{""}, func(Tri) int { return 1 }, 1},
-	}
+	tcc1 := Commands{		Command{"name", Brief{""}, MakeHandler(), 1}	}
 	if e := tcc1.Validate(); e == nil {
 		t.Error("validator accepted Commands with invalid element")
 	}
-	tcc2 := Commands{Command{"name", Brief{""}, func(Tri) int { return 1 }}}
+	tcc2 := Commands{Command{"name", Brief{""}, MakeHandler()}}
 	if e := tcc2.Validate(); e != nil {
 		t.Error("validator rejected valid Commands")
 	}
@@ -189,33 +193,14 @@ func TestDefault(t *testing.T) {
 	if e == nil {
 		t.Error("validator allowed more than one")
 	}
-
-	// item is string
-	td2 := Default{
-		1,
-	}
+	// no error!
+	td2 := Default{1}
 	e = td2.Validate()
-	if e == nil {
-		t.Error("validator permitted other than a string")
-	}
-
-	// item is a ValidName
-	td3 := Default{
-		"abc123",
-	}
-	e = td3.Validate()
-	if e == nil {
-		t.Error("validator permitted an invalid name")
-	}
-
-	// item is a valid
-	td4 := Default{
-		"abc",
-	}
-	e = td4.Validate()
 	if e != nil {
-		t.Error("validator rejected a valid name")
+		t.Error("validator rejected valid Default")
 	}
+
+	
 
 }
 
@@ -527,19 +512,124 @@ func TestTri(t *testing.T) {
 }
 
 func TestTrigger(t *testing.T) {
+	// contains at least 3 elements
+	tt1 := Trigger{1, 1}
+	if e := tt1.Validate(); e == nil {
+		t.Error("Trigger must contain at least 3 elements")
+	}
+	// first is string
+	tt2 := Trigger{1, 1, 1}
+	if e := tt2.Validate(); e == nil {
+		t.Error("first element must be a string")
+	}
+	// name is ValidName
+	tt3 := Trigger{"a ", 1, 1}
+	if e := tt3.Validate(); e == nil {
+		t.Error("validator accepted invalid name")
+	}
+	// has only one Brief
+	tt4 := Trigger{"aaaa", Brief{""}, Brief{""}}
+	if e := tt4.Validate(); e == nil {
+		t.Error("validator accepted more than one Brief")
+	}
+	// has only one Short
+	tt5 := Trigger{"aaaa", Short{'a'}, Short{'a'}}
+	if e := tt5.Validate(); e == nil {
+		t.Error("validator allowed more than one Short")
+	}
+	// has only one Usage
+	tt6 := Trigger{"aaaa", Usage{""}, Usage{""}}
+	if e := tt6.Validate(); e == nil {
+		t.Error("validator allowed more than one Usage")
+	}
+	// has only one Help
+	tt7 := Trigger{"aaaa", Help{""}, Help{""}}
+	if e := tt7.Validate(); e == nil {
+		t.Error("validator allowed more than one Help")
+	}
+	// has only one handler
+	tt8 := Trigger{"name", Brief{""}, MakeHandler(), MakeHandler()}
+	if e := tt8.Validate(); e == nil {
+		t.Error("validator accepted more than one MakeHandler()")
+	}
+	// has only one DefaultOn
+	tt9 := Trigger{"aaaa", DefaultOn{}, DefaultOn{}}
+	if e := tt9.Validate(); e == nil {
+		t.Error("validator allowed more than one DefaultOn")
+	}
+	// has only one RunAfter
+	tt10 := Trigger{"aaaa", RunAfter{}, RunAfter{}}
+	if e := tt10.Validate(); e == nil {
+		t.Error("validator allowed more than one RunAfter")
+	}
+	// has only one Terminates
+	tt11 := Trigger{"aaaa", Terminates{}, Terminates{}}
+	if e := tt11.Validate(); e == nil {
+		t.Error("validator allowed more than one Terminates")
+	}
+	// has invalid Brief
+	tt12 := Trigger{"aaaa", Short{'a'}, Brief{1}}
+	if e := tt12.Validate(); e == nil {
+		t.Error("validator allowed invalid Brief")
+	}
+	// has invalid Short
+	tt13 := Trigger{"aaaa", Brief{"aaaa"}, Short{1}}
+	if e := tt13.Validate(); e == nil {
+		t.Error("validator allowed invalid Short")
+	}
+	// has invalid Usage
+	tt14 := Trigger{"aaaa", Brief{"aaaa"}, Usage{1}}
+	if e := tt14.Validate(); e == nil {
+		t.Error("validator allowed invalid Usage")
+	}
+	// has invalid Help
+	tt15 := Trigger{"aaaa", Brief{"aaaa"}, Help{1}}
+	if e := tt15.Validate(); e == nil {
+		t.Error("validator allowed invalid Help")
+	}
+	// has invalid MakeHandler()
+	handle := MakeHandler()
+	_=handle
+	handle=nil
+	tt16 := Trigger{"aaaa", Brief{"aaaa"}, handle}
+	if e := tt16.Validate(); e == nil {
+		t.Error("validator allowed invalid MakeHandler()")
+	}
+	// has invalid DefaultOn
+	tt17 := Trigger{"aaaa", Brief{"aaaa"}, DefaultOn{1}}
+	if e := tt17.Validate(); e == nil {
+		t.Error("validator allowed invalid DefaultOn")
+	}
+	// has invalid RunAfter
+	tt18 := Trigger{"aaaa", Brief{"aaaa"}, RunAfter{1}}
+	if e := tt18.Validate(); e == nil {
+		t.Error("validator allowed invalid RunAfter")
+	}
+	// has invalid Terminates
+	tt19 := Trigger{"aaaa", Brief{"aaaa"}, Terminates{1}}
+	if e := tt19.Validate(); e == nil {
+		t.Error("validator allowed invalid Terminates")
+	}
 
-	// must contain name, Brief and Handler
-
-	// first element is name
-
-	// name is a ValidName
-
-	// only one Brief
-
-	// only one Handler
-
-	// rest of items only (one of) Short, Usage, Help, DefaultOn, Terminates and RunAfter
-
+	// has one each of Brief and handler
+	tt20 := Trigger{"aaaa", Brief{"aaaa"}, Terminates{}}
+	if e := tt20.Validate(); e == nil {
+		t.Error("validator allowed Trigger without handler")
+	}
+	tt21 := Trigger{"aaaa", MakeHandler(), Terminates{}}
+	if e := tt21.Validate(); e == nil {
+		t.Error("validator allowed Trigger without Brief")
+	}
+	// has no other type than those foregoing
+	tt22 := Trigger{"aaaa", Brief{"aaaa"}, MakeHandler(), 3}
+	if e := tt22.Validate(); e == nil {
+		t.Error("validator allowed invalid element")
+	}
+	// no error!
+	tt23 := Trigger{"aaaa", Brief{"aaaa"}, MakeHandler(), Terminates{}}
+	if e := tt23.Validate(); e != nil {
+		t.Error("validator rejected valid Trigger")
+	}
 }
 
 func TestUsage(t *testing.T) {
@@ -696,7 +786,6 @@ func TestVar(t *testing.T) {
 	}
 	// has one each of Brief and Slot
 	tv16 := Var{"aaaa", Brief{"aaa"}, Default{"aa"}}
-	t.Log(tv16.Validate())
 	if e := tv16.Validate(); e == nil {
 		t.Error("validator allowed absence of Brief or Slot")
 	}
@@ -709,7 +798,7 @@ func TestVar(t *testing.T) {
 
 	// no error!}
 	tv18 := Var{"aaaa", Brief{tstring}, Slot{&tstring}}
-	if e := tv18.Validate(); e == nil {
+	if e := tv18.Validate(); e != nil {
 		t.Error("validator rejected valid Var")
 	}
 
