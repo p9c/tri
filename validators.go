@@ -671,6 +671,8 @@ func (r *Var) Validate() error {
 	if !(validSet[brief] && validSet[slot]) {
 		return errors.New("Var must contain one each of Brief and Slot")
 	}
+	// TODO: check that Default value can be assigned to dereferenced Slot variable
+	
 	return nil
 }
 

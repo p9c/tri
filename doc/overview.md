@@ -12,7 +12,9 @@
 
 5. Validate application's Tri declaration, this should be inside an `init()` or first within the `main()`.
    
-   In this step all of the other-than-zero defaults on Vars will be determined to be correctly specified in as far as presence, and in most cases, typing.
+   > In this step all of the other-than-zero defaults on Vars will be determined to be correctly specified in as far as presence, and in most cases, type checking. 
+   > 
+   > **TODO: Validators need to type-check between Default and Slot type in Vars.**
    
    There is no need to create a resultant struct, as the use of Slot elements connects the destination to the source definition, with its defaults (or implied zeroes) specified. The declaration provides paths and types and content elements for default, and is used to point to the final destination for each of the variables.
 
@@ -25,6 +27,42 @@
    As well as those specified in the Tri itself, there is several top-level Var and Trigger types that can also be valid both in config and CLI. Triggers are processed immediately as they are found.
 
 9. Parsing is now complete, all values are placed implicitly indirectly to their correct destination in this process and non-terminating trigger handlers are run (init, save), and then application main is launched with the composed configuration ready.
+
+## Types for Vars
+
+In the target application configuration structures for the intended purpose for writing this library, the destination configuration structures have a set of variable types that we must correctly validate and parse.
+
+### List of needed types for Pod subcommands
+
+These are the types that the initial implementation of Tri will target, their in-configuration storage type, their actual type which they must parse correctly to, and thus be validated both in Default and Slot lists, elaborated as a tree from the configuration store type to the content constraint subtype, if applicable (url, addresses, durations, etc)
+
+- bool
+
+   true/false values, default is false unless Default is present.
+
+- int
+
+   Mostly these are actually scalars. Qualifiers: Some have valid ranges, some have special meaning to -1 (genthreads meaning all available threads).
+
+- uint32
+
+   these are all scalars, in most cases zero is not a default and is invalid. Some refer to sizes in bytes - parser should understand KMG (kilo mega giga) - for this case for simplicity KiB MiB GiB, the base 1024. User likely would not use such multipliers unless it is a byte size, so one parser can handle all of these, as their outputs generally can not be over 2^32 (4 billion, 4GiB).
+
+- float64
+
+   In pod these are all amounts of currency, maximum precision of 8 decimal places (satoshi). Excess decimal places are truncated before parsing string to float
+
+- string
+
+   Strings are a mix of quite different types. One is a port number spec, others are filesystem paths, some are URLs and some are network addresses. This especially hints towards creating validator handlers (I think maybe this is the whole solution)
+
+- []string
+
+   Most of these are either URLs or addresses that one or more instances of the variable name may be present and each item appends to the slice if valid
+
+- time.Duration
+
+   Time has a simple parser for this. A wrapper is needed for it.
 
 ## Built in Variables and Triggers
 

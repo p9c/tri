@@ -204,6 +204,7 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] has invalid Slot
       - [x] has one each of Brief and Slot
       - [x] has no other type than those foregoing
+      - [ ] Default value is assignable to dereferenced Slot pointer
       - [x] no error!
 
    - [x] `Version.Validate()`
