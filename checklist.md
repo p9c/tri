@@ -29,6 +29,7 @@
 Each validator has several error conditions, so each of them are elaborated under the validation function's heading.
 
 - [x] Test stubs written
+- [x] 100% coverage
 
    - [x] `Brief.Validate()`
 
