@@ -24,7 +24,7 @@
    - [x] `Version.Validate()`
    - [x] `tri.ValidName()`
 
-### Tests
+### Declaration syntax validator tests
 
 Each validator has several error conditions, so each of them are elaborated under the validation function's heading.
 
@@ -231,3 +231,22 @@ Each validator has several error conditions, so each of them are elaborated unde
 ## Commandline Parser
 
    - [ ] Scanner
+
+     - [ ] recognise - and -- prefixed var/trigger items
+     - [ ] recognise values assigned by --name=value and --name value to be one part
+     - [ ] find all of the names in passed Tri declaration that CLI args override
+     - [ ] ensure values in Vars are correct type based on Tri declaration
+     - [ ] recognise top level Tri builtin trigger version/v, save/S and init/I, being print version, save state after configuration to config file, and revert config to default (ie, empty it) - these triggers should run immediately they are found (this is why arrays were used instead of maps), with the save builtin triggering configuration rewrite
+
+   - [ ] Configuration and triggers
+
+     - [ ] read config and fill fields provided that parse correctly or return error
+     - [ ] write only fields that differ from default values
+     - [ ] special builtin Tri top-level Var datadir, and library default (based on home dir with dot folder bearing Tri name)
+
+   - [ ] Composition
+
+     - [ ] Default base is filled from declaration automatically by Slot fields
+     - [ ] Configuration file values replace defaults
+     - [ ] Command line parameters load over top of result of previous two steps
+     - [ ] When when save/S builtin is found, trigger rewrite of config file prior to launch
