@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func MakeTestHandler() func(Tri) int {
-	return func(Tri) int { return 0 }
+func MakeTestHandler() func(*Tri) int {
+	return func(*Tri) int { return 0 }
 }
 
 func TestBrief(t *testing.T) {

@@ -32,7 +32,7 @@
 
 In the target application configuration structures for the intended purpose for writing this library, the destination configuration structures have a set of variable types that we must correctly validate and parse.
 
-### List of needed types for Pod subcommands
+### Types
 
 These are the types that the initial implementation of Tri will target, their in-configuration storage type, their actual type which they must parse correctly to, and thus be validated both in Default and Slot lists, elaborated as a tree from the configuration store type to the content constraint subtype, if applicable (url, addresses, durations, etc)
 

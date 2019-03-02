@@ -91,9 +91,25 @@ Short is a single character (case sensitive) that can be substituted for the `na
 
 Slot is intended to store a pointer to another variable which usually will be a configuration field of an external configuration variable, and will have the final value parsed out of the configuration composition loaded into it using dereferencing.
 
-## `Handler`
+## Handlers
 
-Handler is a function that accepts a Tri as its sole parameter and returns an int with the same semantics as a shell command return, 0 means no error, nonzero means error, any specific numbers can be used to indicate a specific error type.
+There is three types of handlers in Tri: Trigger, Var and Command handlers. 
+
+- Trigger handlers have the signature `func(*Tri) int` and are invoked by passing the root Tri struct, so that they can access sibling and parent (and other) values in the configuration. 
+  
+  For this reason also, they are not invoked until composition is completed, even if they don't at all require complete configuration. Invocation passes the pointer to the root Tri struct that they are embedded inside.
+
+  Their return values mimic that of standard execution, a nonzero value indicating to the shell that execution encountered an unrecoverable error.
+
+- Command handlers have the same signature as Trigger handlers, because they often will need the resultant composed configuration accessible. Equally, they may not need this as the slots load a possible secondary variable(s) are filled during parsing, however, they always are passed this.
+
+   The implementation for the execution of triggers inside commands in their use to configure external variables automatically with slots. Like Trigger handlers, they return zero for ok and nonzero indicates error, the specific meaning of errors must be implemented separately if there is a need for this, both in the returning side as well as the caller's side
+
+- Var handlers have a different signature and purpose. Their purpose is to take the string value parsed out of CLI and validate and load the Slot field(s) also in the declaration.
+
+   Var handler signature is `func(*Var, interface{}) error`. Var gives access to all of the Var fields relevant to the parsing and validation, it implements the validation that the Default matches the dereferenced type from the slot, the parsing from string to this type, and assigning it to the dereferenced Slot variables, which have already been checked to ensure they are uniform when more than one is present, and then it should load all of them.
+
+   Tri has implementations of the handlers for all of the types you can see described in [overview](overview.md#Types) in the Types section, users of the library who need other types must write their own implementations to the specific types, based on these default builtins.
 
 ## `Terminates`
 
@@ -106,6 +122,14 @@ RunAfter indicates that the command will run on shutdown instead of before start
 ## `Trigger`
 
 Trigger is a one-shot function that will be used for things like resetting configurations to default, running reindexing or replay or other similar one-off processes that may sometimes be needed for the application.
+
+Triggers have several boolean flags that affect when they run and signal also how they affect the execution path.
+
+Triggers can terminate execution of the app altogether, they have a possibility too be default on, and the flag disables it (not negate, disable, so multiple don't produce undefined), and the trigger can be set to run at shutdown instead of directly after parsing of CLI and config and before launch of Command handler.
+
+Some triggers maybe could execute before completion of parsing defaults, configuration and command line arguments, but for the sake of simplicity, these handlers do not execute until after parsing and before the (possible) invocation of the subcommand handler the user has specified. 
+
+See [Handlers](#Handlers) for more information about Trigger handlers as well as the other handler types.
 
 ## `Default`
 

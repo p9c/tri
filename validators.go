@@ -110,7 +110,7 @@ func (r *Command) Validate() error {
 			if e != nil {
 				return fmt.Errorf("error in Command at index %d: %v", i, e)
 			}
-		case func(Tri) int:
+		case func(*Tri) int:
 			if validSet[handler] {
 				return fmt.Errorf("only one Handler permitted in a Command, second found at index %d", i)
 			}
@@ -472,7 +472,7 @@ func (r *Trigger) Validate() error {
 					"Trigger contains invalid element at %d :%s", i, e)
 			}
 
-		case func(Tri) int:
+		case func(*Tri) int:
 			if validSet[handler] {
 				return fmt.Errorf(
 					"Trigger may (only) contain one Handler, second found at index %d", i)
@@ -672,7 +672,7 @@ func (r *Var) Validate() error {
 		return errors.New("Var must contain one each of Brief and Slot")
 	}
 	// TODO: check that Default value can be assigned to dereferenced Slot variable
-	
+
 	return nil
 }
 
