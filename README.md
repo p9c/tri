@@ -56,7 +56,7 @@ See the [checklist](checklist.md) for current status.
 
 ## Documentation
 
-See [overview](doc/overview.md) for implementation and usage information, and [declarations](doc/declarations.md) for a human-readable description of the declaration syntax used in Tri.
+See [overview](doc/overview.md) for implementation and usage information, and [declarations](doc/declarations.md) for a human-readable description of the declaration syntax used in Tri. The format of the configuration file can be found in [configformat](docs/configformat.md).
 
 ## Motivation
 

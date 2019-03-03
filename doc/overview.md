@@ -82,10 +82,12 @@ Any application built with Tri implicitly has a data directory (defaulting to ap
 
    Deletes configuration file, then exits. Future runs will then start from defaults. Configuration files only store values that are not default.
 
-3. `save`
+2. `save`
    
    At the end of successful parse of config and CLI args, the new state is persisted into the configuration file.
 
-Note that both of these triggers will be overridden if explicitly specified in the declaration, should a specific further effect be required and  these names are desired to be used. They do not have short versions to conserve names for the application's purposes.
+3. `defaults`
+
+   Defaults will print the entire set of names as they would appear in the configuration, with their default values afterwards, with one prefix tab grouping command items and two prefix tabs grouping items in lists (if default of this array element *has* more than one item).
 
 Also note that logging configuration is not handled by default, nor is there a parser for it. If the application needs these configurations, the handler must be written by the developer to fit the system they are using. I recommend the logger I wrote, found within the Parallelcoin `pod` repository, [located here](https://github.com/parallelcointeam/pod/tree/master/pkg/util/clog).
