@@ -175,6 +175,8 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] has invalid RunAfter
       - [x] has one each of Brief and handler
       - [x] has no other type than those foregoing
+      - [x] has only one Group
+      - [x] has invalid Group
       - [x] no error!
 
    - [x] `Usage.Validate()`
@@ -204,7 +206,9 @@ Each validator has several error conditions, so each of them are elaborated unde
       - [x] has invalid Slot
       - [x] has one each of Brief and Slot
       - [x] has no other type than those foregoing
-      - [ ] Default value is assignable to dereferenced Slot pointer
+      - [x] Default value is assignable to dereferenced Slot pointer (NOTE: only one of the 6 available types is tested - write test later, it's all copypasta)
+      - [x] has only one Group
+      - [x] has invalid Group
       - [x] no error!
 
    - [x] `Version.Validate()`

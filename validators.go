@@ -1,6 +1,7 @@
 package tri
 
 import (
+	"time"
 	"reflect"
 	"errors"
 	"fmt"
@@ -35,7 +36,7 @@ func (r *Brief) Validate() error {
 func (r *Command) Validate() error {
 
 	R := *r
-	if len(R)<1 {
+	if len(R) < 1 {
 		return errors.New("empty Command")
 	}
 	s, ok := R[0].(string)
@@ -239,7 +240,7 @@ func (r *Group) Validate() error {
 		return errors.New("Group element must be a string")
 	}
 	if e := ValidName(s); e != nil {
-		return fmt.Errorf("error in name of Command: %v", e)
+		return fmt.Errorf("error in name of Group: %v", e)
 	}
 	return nil
 }
@@ -335,7 +336,7 @@ func (r *Tri) Validate() error {
 	// validSet is an array of 4 elements that represent the presence of the 4 mandatory parts.
 	var validSet [2]bool
 	brief, version := 0, 1
-	var singleSet [2]bool
+	var singleSet [3]bool
 	defcom, commands := 0, 1
 	n, ok := R[0].(string)
 	if !ok {
@@ -365,7 +366,7 @@ func (r *Tri) Validate() error {
 				return fmt.Errorf(
 					"Tri contains more than one Version, second found at index %d", i)
 			}
-			validSet[version]=true
+			validSet[version] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf("Tri field %d: %s", i, e)
 			}
@@ -390,38 +391,37 @@ func (r *Tri) Validate() error {
 			if e != nil {
 				return fmt.Errorf("error in Tri at index %d: %v", i, e)
 			}
-			
 		case DefaultCommand:
 			if singleSet[defcom] {
 				return fmt.Errorf(
 					"Tri contains more than one DefaultCommand, second found at index %d", i)
-				}
-				singleSet[defcom] = true
-				e := y.Validate()
-				if e != nil {
-					return fmt.Errorf("Tri field %d: %s", i, e)
-				}
-				commname := y[0].(string)
-				// DefaultCommand must match in its name one of the Command items in also present Commands array
-				foundComm := false
-				foundDefComm := false
-				for _, a := range R {
-					switch c := a.(type) {
-					case Commands:
-						foundComm = true
-						for _, b := range c {
-							if b[0].(string) == commname {
-								foundDefComm = true
-							}
+			}
+			singleSet[defcom] = true
+			e := y.Validate()
+			if e != nil {
+				return fmt.Errorf("Tri field %d: %s", i, e)
+			}
+			commname := y[0].(string)
+			// DefaultCommand must match in its name one of the Command items in also present Commands array
+			foundComm := false
+			foundDefComm := false
+			for _, a := range R {
+				switch c := a.(type) {
+				case Commands:
+					foundComm = true
+					for _, b := range c {
+						if b[0].(string) == commname {
+							foundDefComm = true
 						}
-					default:
 					}
+				default:
 				}
-				if !foundComm {
-					return errors.New("DefaultCommand with no Commands array present")
-				} else if !foundDefComm {
-						return errors.New("DefaultCommand found with no matching Command")
-				}
+			}
+			if !foundComm {
+				return errors.New("DefaultCommand with no Commands array present")
+			} else if !foundDefComm {
+				return errors.New("DefaultCommand found with no matching Command")
+			}
 
 		default:
 			return fmt.Errorf(
@@ -455,8 +455,8 @@ func (r *Trigger) Validate() error {
 	// validSet is an array that represent the presence of the mandatory parts.
 	var validSet [2]bool
 	brief, handler := 0, 1
-	var singleSet [6]bool
-	short, usage, help, defon, terminates, runafter := 0, 1, 2, 3, 4, 5
+	var singleSet [7]bool
+	short, usage, help, defon, terminates, runafter, group := 0, 1, 2, 3, 4, 5, 6
 	for i, x := range R[1:] {
 
 		switch y := x.(type) {
@@ -469,7 +469,7 @@ func (r *Trigger) Validate() error {
 			}
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case func(*Tri) int:
@@ -490,7 +490,7 @@ func (r *Trigger) Validate() error {
 			singleSet[short] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case Usage:
@@ -500,7 +500,7 @@ func (r *Trigger) Validate() error {
 			singleSet[usage] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case Help:
@@ -510,7 +510,7 @@ func (r *Trigger) Validate() error {
 			singleSet[help] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case DefaultOn:
@@ -520,7 +520,7 @@ func (r *Trigger) Validate() error {
 			singleSet[defon] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case Terminates:
@@ -530,7 +530,7 @@ func (r *Trigger) Validate() error {
 			singleSet[terminates] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		case RunAfter:
@@ -540,7 +540,18 @@ func (r *Trigger) Validate() error {
 			singleSet[runafter] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Trigger contains invalid element at %d :%s", i, e)
+					"Trigger contains invalid element at %d - %s", i, e)
+			}
+
+		case Group:
+			if singleSet[group] {
+				return fmt.Errorf(
+					"Trigger may only contain one Group, extra found at index %d", i)
+			}
+			singleSet[group] = true
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Trigger contains invalid element at %d - %s", i, e)
 			}
 
 		default:
@@ -596,8 +607,8 @@ func (r *Var) Validate() error {
 	var validSet [2]bool
 	brief, slot := 0, 1
 	// singleSet is an array representing the optional elements that may not be more than one inside a Var
-	var singleSet [4]bool
-	short, usage, help, def := 0, 1, 2, 3
+	var singleSet [5]bool
+	short, usage, help, def, group := 0, 1, 2, 3, 4
 	for i, x := range R[1:] {
 
 		switch y := x.(type) {
@@ -610,7 +621,7 @@ func (r *Var) Validate() error {
 			}
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
 			}
 
 		case Short:
@@ -620,7 +631,7 @@ func (r *Var) Validate() error {
 			singleSet[short] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
 			}
 
 		case Usage:
@@ -630,7 +641,7 @@ func (r *Var) Validate() error {
 			singleSet[usage] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
 			}
 
 		case Help:
@@ -640,7 +651,7 @@ func (r *Var) Validate() error {
 			singleSet[help] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
 			}
 
 		case Default:
@@ -650,7 +661,46 @@ func (r *Var) Validate() error {
 			singleSet[def] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
+			}
+			for _, z := range R {
+				s, ok := z.(Slot)
+				if ok {
+					switch S := s[0].(type) {
+					case *string:
+						ss, ok := y[0].(string)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+						*S = ss
+					case *int:
+						_, ok := y[0].(int)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+					case *uint32:
+						_, ok := y[0].(uint32)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+					case *float64:
+						_, ok := y[0].(float64)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+					case *[]string:
+						_, ok := y[0].([]string)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+					case *time.Duration:
+						_, ok := y[0].(time.Duration)
+						if !ok {
+							return errors.New("slot is not same type as default")
+						}
+					}
+					// *s[0] = *y[0]
+				}
 			}
 
 		case Slot:
@@ -660,9 +710,19 @@ func (r *Var) Validate() error {
 			validSet[slot] = true
 			if e := y.Validate(); e != nil {
 				return fmt.Errorf(
-					"Var contains invalid element at %d :%s", i, e)
+					"Var contains invalid element at %d - %s", i, e)
 			}
 
+		case Group:
+			if singleSet[group] {
+				return fmt.Errorf(
+					"Var may only contain one Group, extra found at index %d", i)
+			}
+			singleSet[group] = true
+			if e := y.Validate(); e != nil {
+				return fmt.Errorf(
+					"Var contains invalid element at %d - %s", i, e)
+			}
 		default:
 			return fmt.Errorf(
 				"found invalid item type at element %d in a Var", i)

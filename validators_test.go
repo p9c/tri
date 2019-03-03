@@ -175,10 +175,8 @@ func TestCommand(t *testing.T) {
 		t.Error("validator rejected valid Command")
 	}
 }
-
-
 func TestCommands(t *testing.T) {
-	tcc1 := Commands{		Command{"name", Brief{""}, MakeTestHandler(), 1}	}
+	tcc1 := Commands{Command{"name", Brief{""}, MakeTestHandler(), 1}}
 	if e := tcc1.Validate(); e == nil {
 		t.Error("validator accepted Commands with invalid element")
 	}
@@ -510,7 +508,7 @@ func TestTri(t *testing.T) {
 		t.Error("validator accepted more than one Brief")
 	}
 	// contains (only) one Version
-	ttr5 := Tri{"aaaa", Version{1,1,1}, Version{1,1,1}, Brief{"aaaa"}}
+	ttr5 := Tri{"aaaa", Version{1, 1, 1}, Version{1, 1, 1}, Brief{"aaaa"}}
 	if e := ttr5.Validate(); e == nil {
 		t.Error("validator accepted more than one Version")
 	}
@@ -525,7 +523,7 @@ func TestTri(t *testing.T) {
 		t.Error("validator accepted more than one DefaultCommand")
 	}
 	// DefaultCommand with no Commands array
-	ttr8 := Tri{"aaaa", DefaultCommand{"aaaa"}, Brief{"aaaa"} }
+	ttr8 := Tri{"aaaa", DefaultCommand{"aaaa"}, Brief{"aaaa"}}
 	if e := ttr8.Validate(); e == nil {
 		t.Error("validator accepted DefaultCommand with no Commands present")
 	}
@@ -535,42 +533,42 @@ func TestTri(t *testing.T) {
 		t.Error("validator accepted more than one DefaultCommand")
 	}
 	// contains invalid Var
-	ttr10 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Var{}}
+	ttr10 := Tri{"aaaa", Version{1, 1, 1}, Brief{"aaaa"}, Var{}}
 	if e := ttr10.Validate(); e == nil {
 		t.Error("validator accepted invalid Var")
 	}
 	// contains invalid Trigger
-	ttr11 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Trigger{}}
+	ttr11 := Tri{"aaaa", Version{1, 1, 1}, Brief{"aaaa"}, Trigger{}}
 	if e := ttr11.Validate(); e == nil {
 		t.Error("validator accepted invalid Trigger")
 	}
 	// contains invalid DefaultCommand
-	ttr12 := Tri{"aaaa", Version{1,1,1}, DefaultCommand{}, Brief{"aaaa"}, Commands{Command{"commname"}}}
+	ttr12 := Tri{"aaaa", Version{1, 1, 1}, DefaultCommand{}, Brief{"aaaa"}, Commands{Command{"commname"}}}
 	if e := ttr12.Validate(); e == nil {
 		t.Error("validator accepted invalid DefaultCommand")
 	}
 	// contains invalid Command in Commands
-	ttr13 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"}, Commands{Command{}}}
+	ttr13 := Tri{"aaaa", Version{1, 1, 1}, Brief{"aaaa"}, Commands{Command{}}}
 	if e := ttr13.Validate(); e == nil {
 		t.Error("validator accepted invalid Command element in Commands")
 	}
 	// only contains element from set of possible elements
-	ttr14 := Tri{"aaaa", Version{1,1,1}, Brief{"aaaa"},1}
+	ttr14 := Tri{"aaaa", Version{1, 1, 1}, Brief{"aaaa"}, 1}
 	if e := ttr14.Validate(); e == nil {
 		t.Error("validator accepted invalid element in Tri")
 	}
 	// contains invalid Brief
-	ttr15 := Tri{"aaaa", Version{1,1,1}, Brief{1}}
+	ttr15 := Tri{"aaaa", Version{1, 1, 1}, Brief{1}}
 	if e := ttr15.Validate(); e == nil {
 		t.Error("validator accepted invalid Brief")
 	}
 	// contains invalid Version
-	ttr16 := Tri{"aaaa", Version{1,1,1,1}, Brief{"valid brief"}}
+	ttr16 := Tri{"aaaa", Version{1, 1, 1, 1}, Brief{"valid brief"}}
 	if e := ttr16.Validate(); e == nil {
 		t.Error("validator accepted invalid Version")
 	}
 	// Brief is missing
-	ttr17 := Tri{"aaaa", DefaultCommand{"commname"}, Version{1,1,1}, Commands{Command{"commname",	Brief{"valid brief"},MakeTestHandler()}}}
+	ttr17 := Tri{"aaaa", DefaultCommand{"commname"}, Version{1, 1, 1}, Commands{Command{"commname", Brief{"valid brief"}, MakeTestHandler()}}}
 	if e := ttr17.Validate(); e == nil {
 		t.Error("validator accepted missing Brief")
 	}
@@ -588,7 +586,7 @@ func TestTri(t *testing.T) {
 		t.Error("validator accepted missing Version")
 	}
 	// no error!
-	ttr19 := Tri{"aaaa", DefaultCommand{"commname"}, Brief{"valid brief"},
+	ttr21 := Tri{"aaaa", DefaultCommand{"commname"}, Brief{"valid brief"},
 		Commands{
 			Command{
 				"commname",
@@ -596,9 +594,9 @@ func TestTri(t *testing.T) {
 				MakeTestHandler(),
 			},
 		},
-		Version{1,1,1},
+		Version{1, 1, 1},
 	}
-	if e := ttr19.Validate(); e != nil {
+	if e := ttr21.Validate(); e != nil {
 		t.Error("validator rejected valid Tri")
 	}
 
@@ -682,8 +680,8 @@ func TestTrigger(t *testing.T) {
 	}
 	// has invalid MakeTestHandler()
 	handle := MakeTestHandler()
-	_=handle
-	handle=nil
+	_ = handle
+	handle = nil
 	tt16 := Trigger{"aaaa", Brief{"aaaa"}, handle}
 	if e := tt16.Validate(); e == nil {
 		t.Error("validator allowed invalid MakeTestHandler()")
@@ -718,9 +716,19 @@ func TestTrigger(t *testing.T) {
 	if e := tt22.Validate(); e == nil {
 		t.Error("validator allowed invalid element")
 	}
+	// has only one Group
+	tt23 := Trigger{"aaaa", Brief{"aaaa"}, MakeTestHandler(), Group{"aaaa"}, Group{"aaaa"}}
+	if e := tt23.Validate(); e == nil {
+		t.Error("validator allowed more than one DefaultOn")
+	}
+	// has invalid Group
+	tt24 := Trigger{"aaaa", Brief{"aaaa"}, MakeTestHandler(), Group{1}}
+	if e := tt24.Validate(); e == nil {
+		t.Error("validator allowed invalid DefaultOn")
+	}
 	// no error!
-	tt23 := Trigger{"aaaa", Brief{"aaaa"}, MakeTestHandler(), Terminates{}}
-	if e := tt23.Validate(); e != nil {
+	tt25 := Trigger{"aaaa", Brief{"aaaa"}, MakeTestHandler(), Terminates{}}
+	if e := tt25.Validate(); e != nil {
 		t.Error("validator rejected valid Trigger")
 	}
 }
@@ -882,16 +890,31 @@ func TestVar(t *testing.T) {
 	if e := tv16.Validate(); e == nil {
 		t.Error("validator allowed absence of Brief or Slot")
 	}
-
 	// has no other type than those foregoing
-	tv17 := Var{"aaaa", Brief{tstring}, Slot{&tstring}, 1}
+	tv17 := Var{"aaaa", Brief{tstring}, Slot{&tstring}, 1, MakeTestHandler()}
 	if e := tv17.Validate(); e == nil {
 		t.Error("validator rejected valid Var")
 	}
-
+	// has only one Group
+	tv18 := Var{"aaaa", Brief{tstring}, Slot{&tstring},
+		Group{"aaaa"}, Group{"aaaa"},
+	}
+	if e := tv18.Validate(); e == nil {
+		t.Error("validator accepted more than one Group")
+	}
+	// has invalid Group
+	tv19 := Var{"aaaa", Brief{"aaaa"}, Slot{&tstring}, Group{""}}
+	if e := tv19.Validate(); e == nil {
+		t.Error("validator allowed invalid Group")
+	}
+	// Default value is assignable to dereferenced Slot pointer
+	tv20 := Var{"aaaa", Brief{"aaaa"}, Slot{&tstring}, Default{5}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
 	// no error!}
-	tv18 := Var{"aaaa", Brief{tstring}, Slot{&tstring}}
-	if e := tv18.Validate(); e != nil {
+	tv21 := Var{"aaaa", Brief{tstring}, Slot{&tstring}}
+	if e := tv21.Validate(); e != nil {
 		t.Error("validator rejected valid Var")
 	}
 
