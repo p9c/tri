@@ -16,13 +16,13 @@
    
    There is no need to create a resultant struct, as the use of Slot elements, which are interface{} containing pointer to (optionally multiple) other variables connects the destination to the source definition, with its defaults (or implied zeroes) specified. The declaration provides paths and types and content elements for default, and is used to point to the final destination for each of the variables.
 
-6. Parse os.Args one by one until a valid trigger or variable definition is found, then the name is sought within the Tri, and if found, value is parsed to expected type, and value assigned to dereferenced Slot pointer value. (each of these can error and halt execution)
+6. Parse os.Args one by one and generate a `map[string]interface{}` containing the names and the type expected is found by locating the name in the Tri and type switch on the Slot that Var types contain.
 
 7. Based on CLI arg specified data directory found in the previous step, or from the default location, JSON configuration file is read and parsed.
 
 8. Configuration loader then places decoded, and validated values into their respective Slot, after checking type is correct, which is performed by the handlers specified in Vars.
 
-9. Built-in triggers take precedence over custom triggers. Init terminates after clearing the configuration file, save rewrites it after parsing and before initiating the Command handler that is specified.
+9.  Built-in triggers take precedence over custom triggers. Init terminates after clearing the configuration file, save rewrites it after parsing and before initiating the Command handler that is specified.
 
 ## Types for Vars
 
