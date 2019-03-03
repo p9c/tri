@@ -666,13 +666,12 @@ func (r *Var) Validate() error {
 			for _, z := range R {
 				s, ok := z.(Slot)
 				if ok {
-					switch S := s[0].(type) {
+					switch s[0].(type) {
 					case *string:
-						ss, ok := y[0].(string)
+						_, ok := y[0].(string)
 						if !ok {
 							return errors.New("slot is not same type as default")
 						}
-						*S = ss
 					case *int:
 						_, ok := y[0].(int)
 						if !ok {

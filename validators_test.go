@@ -1,6 +1,7 @@
 package tri
 
 import (
+	"time"
 	"testing"
 )
 
@@ -909,6 +910,31 @@ func TestVar(t *testing.T) {
 	}
 	// Default value is assignable to dereferenced Slot pointer
 	tv20 := Var{"aaaa", Brief{"aaaa"}, Slot{&tstring}, Default{5}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
+	var tint int
+	tv20 = Var{"aaaa", Brief{"aaaa"}, Slot{&tint}, Default{" "}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
+	var tuint32 uint32
+	tv20 = Var{"aaaa", Brief{"aaaa"}, Slot{&tuint32}, Default{0.1}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
+	var tfloat64 float64
+	tv20 = Var{"aaaa", Brief{"aaaa"}, Slot{&tfloat64}, Default{5}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
+	var tstringslice []string
+	tv20 = Var{"aaaa", Brief{"aaaa"}, Slot{&tstringslice}, Default{"aaa"}}
+	if e := tv20.Validate(); e == nil {
+		t.Error("validator allowed default that can't be assigned to Slot")
+	}
+	var tduration time.Duration
+	tv20 = Var{"aaaa", Brief{"aaaa"}, Slot{&tduration}, Default{5}}
 	if e := tv20.Validate(); e == nil {
 		t.Error("validator allowed default that can't be assigned to Slot")
 	}

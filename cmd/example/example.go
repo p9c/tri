@@ -6,10 +6,13 @@ import (
 
 type exampleConf struct {
 	datadir string
-
 }
 
 var cfg = exampleConf{
+	datadir: "/not/the/default/path",
+}
+
+var cfg2 = exampleConf{
 	datadir: "/not/the/default/path",
 }
 
@@ -55,7 +58,7 @@ var exampleTri = Tri{
 				Help{"help"},
 				Default{"~/.pod"},
 				Group{"groupname"},
-				Slot{&cfg.datadir},
+				Slot{&cfg.datadir, &cfg2.datadir},
 			},
 			Trigger{"wallet",
 				Short{'w'},
